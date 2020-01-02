@@ -58,6 +58,10 @@ class Block(pygame.sprite.Sprite):
         if any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_spr]):
             self.rect[0] -= 50
 
+    def run_down(self):
+        while not pygame.sprite.collide_mask(self, down) and not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_spr]):
+            self.rect[1] += 1
+
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, group, im):
@@ -103,6 +107,8 @@ while running:
                 active.run("l")
             elif event.key == pygame.K_RIGHT:
                 active.run("r")
+            elif event.key == pygame.K_SPACE:
+                active.run_down()
     if flag:
         active = Block()
         flag = False
