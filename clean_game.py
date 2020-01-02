@@ -1,7 +1,6 @@
 import pygame
 import os
 from random import choice
-from PIL import Image
 
 
 pygame.init()
@@ -43,8 +42,11 @@ class Block(pygame.sprite.Sprite):
         self.rect.top = self.rect[1]
 
     def update(self):
+        global flag
         if not pygame.sprite.collide_mask(self, down) and not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_spr]):
             self.rect[1] += 1
+        else:
+            flag = True
 
     def run(self, s):
         if s == "l" and not pygame.sprite.collide_mask(self, l) and not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_spr]):
@@ -58,7 +60,6 @@ class Block(pygame.sprite.Sprite):
 
 
 class Border(pygame.sprite.Sprite):
-    # строго вертикальный или строго горизонтальный отрезок
     def __init__(self, group, im):
         super().__init__(group)
         self.image = load_image(im, -1, -1)
@@ -89,12 +90,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        '''if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 active = Block()
-                '''i = choice(range(2))
+                i = choice(range(2))
                 if i == 0:
-                    active = BlockI()
+                    active = BlockI()a
                 else:
                     active = BlockO()'''
         if event.type == pygame.KEYDOWN:
@@ -102,8 +103,10 @@ while running:
                 active.run("l")
             elif event.key == pygame.K_RIGHT:
                 active.run("r")
-    for i in all_spr:
-        i.update()
+    if flag:
+        active = Block()
+        flag = False
+    active.update()
     all_spr.draw(screen)
     all_sprites.draw(screen)
     clock.tick(fps)
