@@ -126,6 +126,10 @@ while running:
                 active.image = pygame.transform.rotate(active.image, 90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
+            if event.key == pygame.K_UP:
+                active.image = pygame.transform.rotate(active.image, -90)
+                active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
+                active.mask = pygame.mask.from_surface(active.image)
     if flag:
         active = Block()
         flag = False
