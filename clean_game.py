@@ -121,14 +121,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        '''if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                active = Block()
-                i = choice(range(2))
-                if i == 0:
-                    active = BlockI()a
-                else:
-                    active = BlockO()'''
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 active.run("l")
@@ -140,20 +132,29 @@ while running:
                 active.image = pygame.transform.rotate(active.image, 90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
+                if pygame.sprite.collide_mask(active, l) != None or \
+                        len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.rect[0] += 50
+                if pygame.sprite.collide_mask(active, r) != None or \
+                        len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.rect[0] -= 50
+                while pygame.sprite.collide_mask(active, down) != None or len(
+                        [1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.rect[1] -= 1
             if event.key == pygame.K_UP:
                 active.image = pygame.transform.rotate(active.image, -90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
                 print(active.mask)
-            if pygame.sprite.collide_mask(active, l) != None or \
-                    len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                active.rect[0] += 50
-            if pygame.sprite.collide_mask(active, r) != None or \
-                    len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                active.rect[0] -= 50
-            if pygame.sprite.collide_mask(active, down) != None or \
-                    len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                active.rect[1] -= 50
+                if pygame.sprite.collide_mask(active, l) != None or \
+                        len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.rect[0] += 50
+                if pygame.sprite.collide_mask(active, r) != None or \
+                        len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.rect[0] -= 50
+                while pygame.sprite.collide_mask(active, down) != None or len(
+                        [1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.rect[1] -= 1
     if flag:
         active = Block()
         flag = False
