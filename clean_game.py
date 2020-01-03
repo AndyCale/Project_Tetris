@@ -39,7 +39,6 @@ class Block(pygame.sprite.Sprite):
         self.image = Block.image
         self.rect = pygame.Rect(256, 0, 100, 150)
         self.mask = pygame.mask.from_surface(self.image)
-        print(self.mask)
         self.rect.top = self.rect[1]
 
     def update(self):
@@ -59,8 +58,6 @@ class Block(pygame.sprite.Sprite):
                 self.rect[0] -= 50
             if pygame.sprite.collide_mask(self, l) != None or\
                     len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1:
-                print(2, pygame.sprite.collide_mask(self, l),
-                      [1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None])
                 self.rect[0] += 50
         else:
             if s == "r" and not pygame.sprite.collide_mask(self, r) and\
@@ -79,6 +76,18 @@ class Block(pygame.sprite.Sprite):
 
     def rotate(self, angle):
         pygame.transform.rotate(self.image, angle)
+        if pygame.sprite.collide_mask(self, l) != None or \
+                    len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1:
+            self.rect[0] += 50
+            print(1)
+        else:
+            print(pygame.sprite.collide_mask(self, l) != None, len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
+        if pygame.sprite.collide_mask(self, r) != None or \
+                len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1:
+            self.rect[0] -= 50
+            print(2)
+        else:
+            print(pygame.sprite.collide_mask(self, r) != None, len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
 
 
 class Border(pygame.sprite.Sprite):
@@ -136,6 +145,15 @@ while running:
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
                 print(active.mask)
+            if pygame.sprite.collide_mask(active, l) != None or \
+                    len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                active.rect[0] += 50
+            if pygame.sprite.collide_mask(active, r) != None or \
+                    len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                active.rect[0] -= 50
+            if pygame.sprite.collide_mask(active, down) != None or \
+                    len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                active.rect[1] -= 50
     if flag:
         active = Block()
         flag = False
