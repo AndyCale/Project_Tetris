@@ -53,12 +53,26 @@ def start_screen():
 
 def menu():
     screen.fill((0, 0, 0))
-    font = pygame.font.Font(None, 50)
     for let in range(len("TeTris")):
+        font = pygame.font.Font(None, 70)
         text = font.render("TeTris"[let], 1, (choice(range(50, 255)), choice(range(50, 255)), choice(range(50, 255))))
-        text_x = 145 + let * 50
-        text_y = 50
+        text_x = 95 + let * 70
+        text_y = 60
         screen.blit(text, (text_x, text_y))
+
+    # Имя игрока - Здрасте игрок
+
+    for word in range(len(["Играть", "Рекорды", "Об игре", "Выйти"])):
+        font = pygame.font.Font(None, 40)
+        text = font.render(["Играть", "Рекорды", "Об игре", "Выйти"][word], 1,
+                           (255, 255, 255))
+        text_x = 50
+        text_y = 200 + word * 60
+        screen.blit(text, (text_x, text_y))
+        text_w = text.get_width()
+        text_h = text.get_height()
+        pygame.draw.rect(screen, (255, 255, 255), (text_x - 10, text_y - 10,
+                                               text_w + 20, text_h + 20), 1)
 
     while True:
         for event in pygame.event.get():
