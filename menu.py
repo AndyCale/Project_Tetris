@@ -66,6 +66,7 @@ def menu():
         text = font.render(["Играть", "Рекорды", "Об игре", "Выйти"][word], 1, (0, 0, 0))
         text_x = width // 2 - text.get_width() // 2
         text_y = 195 + word * 65
+        text_w = text.get_width()
         text_h = text.get_height()
         pygame.draw.rect(screen, (choice(range(50, 255)), choice(range(50, 255)), choice(range(50, 255))),
                          (width // 2 - 95, text_y - 10, 190, text_h + 20))
@@ -81,9 +82,23 @@ def menu():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                terminate()
                 pos = event.pos
-                game()
+                if 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
+                    game()
+                    print(1)
+                if 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
+                    print("Рекорды")
+                if 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
+                    print("Об игре")
+                if 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
+                    print(2)
+                    terminate()
+
+
+
+            elif pygame.mouse.get_focused():
+                pos = pygame.mouse.get_pos()
+                #if pos[0]
         pygame.display.flip()
         clock.tick(FPS)
 
