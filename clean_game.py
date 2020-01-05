@@ -15,14 +15,6 @@ running = True
 def load_image(name, pos=(0, 0), colorkey=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
-    print(name)
-    '''img = Image.open(fullname)
-    pix = img.load()
-    x, y = img.size
-    for i in range(x):
-        for j in range(y):
-            if pix[i, j] == (255, 255, 255):
-                pix[i, j] = color'''
     if colorkey is None:
         colorkey = image.get_at(pos)
         image.set_colorkey(colorkey)
@@ -31,13 +23,24 @@ def load_image(name, pos=(0, 0), colorkey=None):
     return image
 
 
+def color_block(block, color):
+    w, h = block.get_size()
+    for x in range(w):
+        for y in range(h):
+            if block.get_at((x, y))[:3] != (0, 0, 0):
+                block.set_at((x, y), color)
+
+
 class Block(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(all_spr)
         self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]),
                                 (0, 0))
+        color = (0, 255, 255)
+        color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
         if choice([0, 1]):
             self.image = pygame.transform.flip(self.image, 1, 0)
+        color_block(self.image, color)
         self.rect = pygame.Rect(256, 0, 100, 150)
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.top = self.rect[1]
@@ -82,13 +85,15 @@ class Block(pygame.sprite.Sprite):
             self.rect[0] += 50
             print(1)
         else:
-            print(pygame.sprite.collide_mask(self, l) != None, len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
+            print(pygame.sprite.collide_mask(self, l) != None,
+                  len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
         if pygame.sprite.collide_mask(self, r) != None or \
                 len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1:
             self.rect[0] -= 50
             print(2)
         else:
-            print(pygame.sprite.collide_mask(self, r) != None, len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
+            print(pygame.sprite.collide_mask(self, r) != None,
+                  len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
 
 
 class Border(pygame.sprite.Sprite):
@@ -116,9 +121,11 @@ l = Border(vert_bord_l, "vert.png")
 r = Border(vert_bord_r, "vert.png")
 
 flag = True
+active = 0
 
 while running:
-    screen.fill((255, 0, 0))
+    screen.fill((0, 0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -156,9 +163,11 @@ while running:
                 while pygame.sprite.collide_mask(active, down) != None or len(
                         [1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[1] -= 1
+
     if flag:
         active = Block()
         flag = False
+
     active.update()
     all_spr.draw(screen)
     all_sprites.draw(screen)
