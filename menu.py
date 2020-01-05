@@ -84,6 +84,7 @@ def menu():
 
     # Имя игрока - Здрасте игрок
     ex = False
+    pos = (0, 0)
 
     while True:
         for event in pygame.event.get():
@@ -121,9 +122,10 @@ def menu():
                     print(2)
                     ex = True
 
-
             elif pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
+
+            if True:
                 if ex:
                     pygame.draw.rect(screen, (50, 50, 50),
                                      (width // 2 - 155, height // 2 - 75, 310, 150))
