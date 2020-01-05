@@ -15,6 +15,7 @@ running = True
 def load_image(name, pos=(0, 0), colorkey=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
+    print(name)
     '''img = Image.open(fullname)
     pix = img.load()
     x, y = img.size
@@ -31,12 +32,11 @@ def load_image(name, pos=(0, 0), colorkey=None):
 
 
 class Block(pygame.sprite.Sprite):
-    #color = choice([(255, 0, 0), (0, 255, 0), (0, 0, 255)])
-    image = load_image("block_l_1.png", (0, 0))
-
     def __init__(self):
         super().__init__(all_spr)
-        self.image = Block.image
+        self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png"]), (0, 0))
+        if choice([0, 1]):
+            self.image = pygame.transform.flip(self.image, 1, 0)
         self.rect = pygame.Rect(256, 0, 100, 150)
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.top = self.rect[1]
