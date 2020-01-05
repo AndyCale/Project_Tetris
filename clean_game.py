@@ -34,7 +34,8 @@ def load_image(name, pos=(0, 0), colorkey=None):
 class Block(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(all_spr)
-        self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png"]), (0, 0))
+        self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]),
+                                (0, 0))
         if choice([0, 1]):
             self.image = pygame.transform.flip(self.image, 1, 0)
         self.rect = pygame.Rect(256, 0, 100, 150)
