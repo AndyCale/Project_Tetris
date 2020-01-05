@@ -137,7 +137,7 @@ def menu():
                         for i in range(2):
                             font = pygame.font.Font(None, 26)
                             text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
-                            pygame.draw.rect(screen, (200, 200, 200) if i == 0 else (170, 170, 170),
+                            pygame.draw.rect(screen, (210, 210, 210) if i == 0 else (170, 170, 170),
                                              (200 + 100 * i, 290, 50, 30))
                             pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
                             screen.blit(text, (200 + 100 * i + 10, 290 + 5))
@@ -145,7 +145,7 @@ def menu():
                         for i in range(2):
                             font = pygame.font.Font(None, 26)
                             text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
-                            pygame.draw.rect(screen, (200, 200, 200) if i == 1 else (170, 170, 170),
+                            pygame.draw.rect(screen, (210, 210, 210) if i == 1 else (170, 170, 170),
                                              (200 + 100 * i, 290, 50, 30))
                             pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
                             screen.blit(text, (200 + 100 * i + 10, 290 + 5))
@@ -158,21 +158,21 @@ def menu():
                             screen.blit(text, (200 + 100 * i + 10, 290 + 5))
 
                 elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
-                    draw_button(0, (color[0][0] + 30 if color[0][0] + 30 <= 255 else 255,
-                                    color[0][1] + 30 if color[0][1] + 30 <= 255 else 255,
-                                    color[0][2] + 30 if color[0][2] + 30 <= 255 else 255))
+                    draw_button(0, (color[0][0] + 40 if color[0][0] + 40 <= 255 else 255,
+                                    color[0][1] + 40 if color[0][1] + 40 <= 255 else 255,
+                                    color[0][2] + 40 if color[0][2] + 40 <= 255 else 255))
                 elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
-                    draw_button(1, (color[1][0] + 30 if color[1][0] + 30 <= 255 else 255,
-                                    color[1][1] + 30 if color[1][1] + 30 <= 255 else 255,
-                                    color[1][2] + 30 if color[1][2] + 30 <= 255 else 255))
+                    draw_button(1, (color[1][0] + 40 if color[1][0] + 40 <= 255 else 255,
+                                    color[1][1] + 40 if color[1][1] + 40 <= 255 else 255,
+                                    color[1][2] + 40 if color[1][2] + 40 <= 255 else 255))
                 elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
-                    draw_button(2, (color[2][0] + 30 if color[2][0] + 30 <= 255 else 255,
-                                    color[2][1] + 30 if color[2][1] + 30 <= 255 else 255,
-                                    color[2][2] + 30 if color[2][2] + 30 <= 255 else 255))
+                    draw_button(2, (color[2][0] + 40 if color[2][0] + 40 <= 255 else 255,
+                                    color[2][1] + 40 if color[2][1] + 40 <= 255 else 255,
+                                    color[2][2] + 40 if color[2][2] + 40 <= 255 else 255))
                 elif 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
-                    draw_button(3, (color[3][0] + 30 if color[3][0] + 30 <= 255 else 255,
-                                    color[3][1] + 30 if color[3][1] + 30 <= 255 else 255,
-                                    color[3][2] + 30 if color[3][2] + 30 <= 255 else 255))
+                    draw_button(3, (color[3][0] + 40 if color[3][0] + 40 <= 255 else 255,
+                                    color[3][1] + 40 if color[3][1] + 40 <= 255 else 255,
+                                    color[3][2] + 40 if color[3][2] + 40 <= 255 else 255))
                 else:
                     draw_button(0, (color[0][0] if color[0][0] <= 255 else 255,
                                     color[0][1] if color[0][1] <= 255 else 255,
