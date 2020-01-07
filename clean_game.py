@@ -36,7 +36,6 @@ class Block(pygame.sprite.Sprite):
         super().__init__(all_spr)
         self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]),
                                 (0, 0))
-        color = (0, 255, 255)
         color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
         if choice([0, 1]):
             self.image = pygame.transform.flip(self.image, 1, 0)
@@ -167,7 +166,6 @@ while running:
     if flag:
         active = Block()
         flag = False
-
     active.update()
     all_spr.draw(screen)
     all_sprites.draw(screen)

@@ -56,7 +56,7 @@ def draw_button(word, color):
     text = font.render(["Играть", "Рекорды", "Об игре", "Выйти"][word], 1, (0, 0, 0))
     text_x = width // 2 - text.get_width() // 2
     text_y = 195 + word * 65
-    text_w = text.get_width()
+    # text_w = text.get_width()
     text_h = text.get_height()
     pygame.draw.rect(screen, color,
                      (width // 2 - 95, text_y - 10, 190, text_h + 20))
@@ -94,7 +94,7 @@ def menu():
                 ex = True
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = event.pos
-                if ex == True:
+                if ex:
                     if 200 <= pos[0] <= 250 and 290 <= pos[1] <= 320:
                         terminate()
                     elif 300 <= pos[0] <= 350 and 290 <= pos[1] <= 320:
