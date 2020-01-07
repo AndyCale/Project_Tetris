@@ -13,17 +13,6 @@ clock = pygame.time.Clock()
 running = True
 
 
-'''def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    image = pygame.image.load(fullname).convert()
-    if colorkey is None:
-        colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image.convert_alpha()
-    return image'''
-
-
 def load_image(name, pos=(0, 0), colorkey=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
@@ -80,6 +69,8 @@ def draw_button(word, color):
 
 
 def menu():
+    global screen
+
     screen.fill((0, 0, 0))
 
     color_let = []
@@ -129,6 +120,17 @@ def menu():
                 elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
                     game()
                     print(1)
+                    size = width, height = 550, 550
+                    screen = pygame.display.set_mode(size)
+                    screen.fill((0, 0, 0))
+
+                    for let in range(len("TeTris")):
+                        font = pygame.font.Font(None, 90)
+                        text = font.render("TeTris"[let], 1, (color_let[let]))
+                        text_x = 95 + let * 70
+                        text_y = 60
+                        screen.blit(text, (text_x, text_y))
+
                 elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
                     print("Рекорды")
                 elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
@@ -209,7 +211,7 @@ def menu():
 
 
 def game():
-    size = width, height = 615, 500
+    size = width, height = 615, 700
     screen = pygame.display.set_mode(size)
 
     def color_block(block, color):
@@ -352,7 +354,6 @@ def game():
 
         if flag:
             active = Block()
-            flag = False
         flag = active.update()
         all_spr.draw(screen)
         all_sprites.draw(screen)
