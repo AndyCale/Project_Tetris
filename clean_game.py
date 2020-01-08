@@ -1,10 +1,11 @@
 import pygame
 import os
 from random import choice
+from PIL import Image
 
 
 pygame.init()
-size = width, height = 615, 500
+size = width, height = 615, 800
 screen = pygame.display.set_mode(size)
 
 fps = 50
@@ -53,6 +54,7 @@ class Block(pygame.sprite.Sprite):
             self.rect[1] += 1
         else:
             flag = True
+            print(active.rect)
 
     def run(self, s):
         if s == "l":
@@ -116,6 +118,17 @@ class Board:
         for i in cells:
             pass
 
+
+image = Image.new("RGB", (width, 1), (0, 0, 0))
+pix = image.load()
+for i in range(width):
+    pix[i, 0] = (0, 0, 0)
+image.save("data//horiz.png")
+image = Image.new("RGB", (1, height), (0, 0, 0))
+pix = image.load()
+for j in range(height):
+    pix[0, j] = (0, 0, 0)
+image.save("data//vert.png")
 
 
 all_sprites = pygame.sprite.Group()
