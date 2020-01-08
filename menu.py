@@ -69,7 +69,7 @@ def draw_button(word, color):
 
 
 def menu():
-    global screen
+    global screen, size, width, height
 
     screen.fill((0, 0, 0))
 

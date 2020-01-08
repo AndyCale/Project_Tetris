@@ -16,7 +16,7 @@ def load_image(name, pos=(0, 0), colorkey=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
     if colorkey is None:
-        colorkey = image.get_at(pos)
+        colorkey = (0, 0, 0, 255)
         image.set_colorkey(colorkey)
     else:
         image = image.convert_alpha()
@@ -34,8 +34,8 @@ def color_block(block, color):
 class Block(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(all_spr)
-        self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]),
-                                (0, 0))
+        self.name = choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"])
+        self.image = load_image(self.name, (0, 0))
         color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
         if choice([0, 1]):
             self.image = pygame.transform.flip(self.image, 1, 0)
@@ -43,6 +43,8 @@ class Block(pygame.sprite.Sprite):
         self.rect = pygame.Rect(256, 0, 100, 150)
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.top = self.rect[1]
+        self.rotate = 0
+        self.cut()
 
     def update(self):
         global flag
@@ -77,22 +79,19 @@ class Block(pygame.sprite.Sprite):
                  len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) == 1):
             self.rect[1] += 1
 
-    def rotate(self, angle):
-        pygame.transform.rotate(self.image, angle)
-        if pygame.sprite.collide_mask(self, l) != None or \
-                    len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1:
-            self.rect[0] += 50
-            print(1)
-        else:
-            print(pygame.sprite.collide_mask(self, l) != None,
-                  len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
-        if pygame.sprite.collide_mask(self, r) != None or \
-                len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1:
-            self.rect[0] -= 50
-            print(2)
-        else:
-            print(pygame.sprite.collide_mask(self, r) != None,
-                  len([1 for i in all_spr if pygame.sprite.collide_mask(self, i) != None]) > 1)
+    def cut(self):
+        w, h = self.image.get_size()
+        q, e, r, t = 0, 0, 0, 0
+        while all([self.image.get_at((q, y))[:3] == (0, 0, 0) for y in range(h)]) and q < w - 1:
+            q += 1
+        while all([self.image.get_at((x, e))[:3] == (0, 0, 0) for x in range(w)]) and e < h - 1:
+            e += 1
+        while all([self.image.get_at((w - r - 1, y))[:3] == (0, 0, 0) for y in range(h)]) and r < w - 1:
+            r += 1
+        while all([self.image.get_at((x, h - t - 1))[:3] == (0, 0, 0) for x in range(w)]) and t < h - 1:
+            t += 1
+        self.wall = [q, e, r, t]
+        print(q, e, r, t)
 
 
 class Border(pygame.sprite.Sprite):
@@ -137,6 +136,7 @@ while running:
                 active.run_down()
             if event.key == pygame.K_DOWN:
                 active.image = pygame.transform.rotate(active.image, 90)
+                active.rotate += 1
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
                 if pygame.sprite.collide_mask(active, l) != None or \
@@ -150,9 +150,9 @@ while running:
                     active.rect[1] -= 1
             if event.key == pygame.K_UP:
                 active.image = pygame.transform.rotate(active.image, -90)
+                active.rotate -= 1
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
-                print(active.mask)
                 if pygame.sprite.collide_mask(active, l) != None or \
                         len([1 for i in all_spr if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[0] += 50
@@ -166,7 +166,15 @@ while running:
     if flag:
         active = Block()
         flag = False
+    '''cropped = pygame.Surface((200, 200))
+    print(active.rotate % 4)
+    if active.rotate % 4 == 1:
+        cropped.blit(active.image, (0, 0), (0, 0, 150, active.rect[3] - 50))
+    else:
+        cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
+    screen.blit(cropped, (0, 0))'''
     active.update()
+    active.cut()
     all_spr.draw(screen)
     all_sprites.draw(screen)
     clock.tick(fps)
