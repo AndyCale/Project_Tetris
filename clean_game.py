@@ -44,7 +44,6 @@ class Block(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.top = self.rect[1]
         self.rotate = 0
-        #self.cut()
 
     def update(self):
         global flag
@@ -90,20 +89,9 @@ class Block(pygame.sprite.Sprite):
             r += 1
         while all([self.image.get_at((x, h - t - 1))[:3] == (0, 0, 0) for x in range(w)]) and t < h - 1:
             t += 1
-        self.wall = [q, e, r, t]
-        print(q, e, r, t)
-        print((w - r - q, h - t - e))
         cropped = pygame.Surface((w - r - q, h - t - e))
         cropped.blit(self.image, (0, 0), (q, e, w - r, h - t))
-        '''w, h = cropped.get_size()
-        for x in range(w):
-            for y in range(h):
-                if self.image.get_at((x, y))[:3] != (0, 0, 0):
-                    print(x, y)'''
-
         return cropped
-        #self.image = cropped
-        #print(self.image)
 
 
 class Border(pygame.sprite.Sprite):
@@ -188,19 +176,15 @@ while running:
                     active.rect[1] -= 1
 
     if flag:
-        if active != 0:
-            # (active.rect[0] + active.wall[0]) // 50
-            pass
         active = Block()
+        active.image = active.cut()
+        colorkey = (0, 0, 0, 255)
+        active.image.set_colorkey(colorkey)
+        active.mask = pygame.mask.from_surface(active.image)
         flag = False
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
     screen.blit(cropped, (0, 0))
-    if k:
-        print(active.image)
-        active.image = active.cut()
-        print(active.image)
-        k = 0
     active.update()
     all_spr.draw(screen)
     all_sprites.draw(screen)
