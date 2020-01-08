@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 running = True
 
 
-def load_image(name, pos=(0, 0), colorkey=None):
+def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
     if colorkey is None:
@@ -36,7 +36,7 @@ class Block(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(all_spr)
         self.name = choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"])
-        self.image = load_image(self.name, (0, 0))
+        self.image = load_image(self.name)
         color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
         if choice([0, 1]):
             self.image = pygame.transform.flip(self.image, 1, 0)
@@ -54,7 +54,13 @@ class Block(pygame.sprite.Sprite):
             self.rect[1] += 1
         else:
             flag = True
+            cells = []
+            for i in range(self.rect[0] // 50, (self.rect[0] + self.rect[2]) // 50):
+                for j in range(self.rect[1] // 50, (self.rect[1] + self.rect[3]) // 50):
+                    #print(i * 50 + self.rect[0] % 50 - 1, j * 50 + self.rect[1] % 50 - 1)
+                    print(self.image.get_at((i * 50 + self.rect[0] % 50 - 1, j * 50 + self.rect[1] % 50 - 1)))
             print(active.rect)
+            board.add(cells)
 
     def run(self, s):
         if s == "l":
@@ -99,7 +105,7 @@ class Block(pygame.sprite.Sprite):
 class Border(pygame.sprite.Sprite):
     def __init__(self, group, im):
         super().__init__(group)
-        self.image = load_image(im, -1, -1)
+        self.image = load_image(im, -1)
         self.rect = self.image.get_rect()
         if group == horiz_bord:
             self.rect.bottom = height - 5
