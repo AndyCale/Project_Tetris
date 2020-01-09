@@ -41,7 +41,7 @@ class Block(pygame.sprite.Sprite):
         if choice([0, 1]):
             self.image = pygame.transform.flip(self.image, 1, 0)
         color_block(self.image, color)
-        self.rect = pygame.Rect(256, 0, 100, 150)
+        self.rect = pygame.Rect(256, 0, 150, 200)
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.top = self.rect[1]
         self.rotate = 0
@@ -227,6 +227,8 @@ while running:
         colorkey = (0, 0, 0, 255)
         active.image.set_colorkey(colorkey)
         active.mask = pygame.mask.from_surface(active.image)
+        active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
+        active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
         flag = False
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
