@@ -118,9 +118,23 @@ class Board:
     def __init__(self, wid, hei):
         self.board = [[0] * wid for _ in range(hei)]
 
-    def add(self, *cells):
-        for i in cells:
-            pass
+    def add(self, cells):
+        for cell in cells:
+            self.board[cell[0]][cell[1]] = 1
+        #if any([all(i) for i in self.board]):
+        for line in range(len(self.board)):
+            if all(self.board[line]):
+                self.delete_line(line)
+                print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
+                print(1)
+                for i in range(line, 0, -1):
+                    self.board[i] = self.board[i - 1]
+                print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
+
+    def delete_line(self, line):
+        print()
+        # all_spr.run_down
+
 
 
 class Point(pygame.sprite.Sprite):
