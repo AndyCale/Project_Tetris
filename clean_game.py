@@ -45,10 +45,10 @@ class Block(pygame.sprite.Sprite):
             self.rect = pygame.Rect(256, 0, 150, 200)
         else:
             self.image = img
+            colorkey = (0, 0, 0, 255)
+            self.image.set_colorkey(colorkey)
             self.rect = pygame.Rect(rct[0], rct[1], rct[2], rct[3])
         self.mask = pygame.mask.from_surface(self.image)
-        #self.rect.top = self.rect[1]
-        self.rotate = 0
 
     def update(self):
         global flag
@@ -88,6 +88,9 @@ class Block(pygame.sprite.Sprite):
         while not pygame.sprite.collide_mask(self, down) and\
                 (not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_blocks]) or
                  len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1):
+            '''print(self.rect, pygame.sprite.collide_mask(self, down),
+                  any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_blocks]),
+                  len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1)'''
             self.rect[1] += 1
 
     def cut(self):
@@ -229,7 +232,6 @@ while running:
                 active.run_down()
             if event.key == pygame.K_DOWN:
                 active.image = pygame.transform.rotate(active.image, 90)
-                active.rotate += 1
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
                 while pygame.sprite.collide_mask(active, l) != None or \
@@ -243,7 +245,6 @@ while running:
                     active.rect[1] -= 1
             if event.key == pygame.K_UP:
                 active.image = pygame.transform.rotate(active.image, -90)
-                active.rotate -= 1
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
                 while pygame.sprite.collide_mask(active, l) != None or \
@@ -265,11 +266,10 @@ while running:
         active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
         active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
         flag = False
-    '''for i in all_blocks:
-        if i != active:
-            print(9.7)
-            i.run_down()
-            print(9.8)'''
+        for i in all_blocks:
+            if i != active:
+                i.run_down()
+                i.cut()
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
     screen.blit(cropped, (0, 0))
