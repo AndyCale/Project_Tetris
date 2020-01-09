@@ -55,11 +55,9 @@ class Block(pygame.sprite.Sprite):
         else:
             flag = True
             cells = []
-            for i in range(self.rect[0] // 50, (self.rect[0] + self.rect[2]) // 50):
-                for j in range(self.rect[1] // 50, (self.rect[1] + self.rect[3]) // 50):
-                    #print(i * 50 + self.rect[0] % 50 - 1, j * 50 + self.rect[1] % 50 - 1)
-                    print(self.image.get_at((i * 50 + self.rect[0] % 50 - 1, j * 50 + self.rect[1] % 50 - 1)))
-            print(active.rect)
+            for i in pygame.sprite.spritecollide(self, points, False):
+                if pygame.sprite.collide_mask(self, i):
+                    cells.append(pnt[i])
             board.add(cells)
 
     def run(self, s):
@@ -125,6 +123,15 @@ class Board:
             pass
 
 
+class Point(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__(points)
+        self.image = pygame.Surface((2, 2), pygame.SRCALPHA, 32)
+        pygame.draw.circle(self.image, pygame.Color("red"), (1, 1), 1)
+        self.rect = pygame.Rect(x, y, 2, 2)
+        #self.mask = pygame.mask.from_surface(self.image)
+
+
 image = Image.new("RGB", (width, 1), (0, 0, 0))
 pix = image.load()
 for i in range(width):
@@ -143,6 +150,12 @@ vert_bord_l = pygame.sprite.Group()
 vert_bord_r = pygame.sprite.Group()
 horiz_bord = pygame.sprite.Group()
 board = Board(width // 50, height // 50)
+points = pygame.sprite.Group()
+
+pnt = {}
+for i in range(width // 50):
+    for j in range(height // 50):
+        pnt[Point(i * 50 + 25 + width % 50, j * 50 + 25 + height % 50)] = (j, i)
 
 down = Border(horiz_bord, "horiz.png")
 l = Border(vert_bord_l, "vert.png")
@@ -208,5 +221,6 @@ while running:
     all_spr.draw(screen)
     all_sprites.draw(screen)
     clock.tick(fps)
+    points.draw(screen)
     pygame.display.flip()
 pygame.quit()
