@@ -100,6 +100,20 @@ class Block(pygame.sprite.Sprite):
         return cropped
 
 
+'''class Border(pygame.sprite.Sprite):
+    # строго вертикальный или строго горизонтальный отрезок
+    def __init__(self, x1, y1, x2, y2):
+        super().__init__(all_sprites)
+        if x1 == x2:  # вертикальная стенка
+            self.add(vertical_borders)
+            self.image = pygame.Surface([1, y2 - y1])
+            self.rect = pygame.Rect(x1, y1, 1, y2 - y1)
+        else:  # горизонтальная стенка
+            self.add(horizontal_borders)
+            self.image = pygame.Surface([x2 - x1, 1])
+            self.rect = pygame.Rect(x1, y1, x2 - x1, 1)'''
+
+
 class Border(pygame.sprite.Sprite):
     def __init__(self, group, im):
         super().__init__(group)
@@ -132,10 +146,10 @@ class Board:
                 print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
 
     def delete_line(self, line):
-        print()
-        # all_spr.run_down
-        line_spr = 0
-        pygame.sprite.spritecollide(line_spr, all_blocks)
+        line_spr = Line(line * 50 + 25 + height % 50)
+        for block in pygame.sprite.spritecollide(line_spr, all_blocks, False):
+            print(1, block.rect)
+        #lines.empty()
 
 
 class Point(pygame.sprite.Sprite):
@@ -144,6 +158,13 @@ class Point(pygame.sprite.Sprite):
         self.image = pygame.Surface((2, 2), pygame.SRCALPHA, 32)
         pygame.draw.circle(self.image, pygame.Color("red"), (1, 1), 1)
         self.rect = pygame.Rect(x, y, 2, 2)
+
+
+class Line(pygame.sprite.Sprite):
+    def __init__(self, line):
+        super().__init__(lines)
+        self.image = pygame.Surface([width, 1])
+        self.rect = pygame.Rect(0, line, width, 1)
 
 
 image = Image.new("RGB", (width, 1), (0, 0, 0))
@@ -165,6 +186,7 @@ vert_bord_r = pygame.sprite.Group()
 horiz_bord = pygame.sprite.Group()
 board = Board(width // 50, height // 50)
 points = pygame.sprite.Group()
+lines = pygame.sprite.Group()
 
 pnt = {}
 for i in range(width // 50):
@@ -197,10 +219,10 @@ while running:
                 active.rotate += 1
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
-                if pygame.sprite.collide_mask(active, l) != None or \
+                while pygame.sprite.collide_mask(active, l) != None or \
                         len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[0] += 50
-                if pygame.sprite.collide_mask(active, r) != None or \
+                while pygame.sprite.collide_mask(active, r) != None or \
                         len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[0] -= 50
                 while pygame.sprite.collide_mask(active, down) != None or len(
@@ -211,10 +233,10 @@ while running:
                 active.rotate -= 1
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
-                if pygame.sprite.collide_mask(active, l) != None or \
+                while pygame.sprite.collide_mask(active, l) != None or \
                         len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[0] += 50
-                if pygame.sprite.collide_mask(active, r) != None or \
+                while pygame.sprite.collide_mask(active, r) != None or \
                         len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[0] -= 50
                 while pygame.sprite.collide_mask(active, down) != None or len(
@@ -230,6 +252,9 @@ while running:
         active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
         active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
         flag = False
+    for i in all_blocks:
+        if i != active:
+            i.run_down()
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
     screen.blit(cropped, (0, 0))
@@ -238,5 +263,6 @@ while running:
     all_sprites.draw(screen)
     clock.tick(fps)
     points.draw(screen)
+    lines.draw(screen)
     pygame.display.flip()
 pygame.quit()
