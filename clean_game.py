@@ -57,8 +57,9 @@ class Block(pygame.sprite.Sprite):
                  len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1):
             self.rect[1] += 1
         else:
+            print(1, self.rect)
+            print()
             cells = []
-            print(self.rect)
             for i in pygame.sprite.spritecollide(self, points, False):
                 if pygame.sprite.collide_mask(self, i):
                     cells.append(pnt[i])
@@ -257,10 +258,9 @@ while running:
         active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
         active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
         flag = False
-        for i in all_blocks:
-            if i != active:
-                i.run_down()
-                print(i.rect)
+    for i in all_blocks:
+        if i != active:
+            i.run_down()
                 #i.cut()
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
