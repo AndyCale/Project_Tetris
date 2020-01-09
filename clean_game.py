@@ -63,6 +63,8 @@ class Block(pygame.sprite.Sprite):
                     cells.append(pnt[i])
             board.add(cells)
             flag = True
+            for i in all_blocks:
+                print(i.rect, i.mask, i.image)
 
     def run(self, s):
         if s == "l":
@@ -263,17 +265,19 @@ while running:
         active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
         active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
         flag = False
-    for i in all_blocks:
+    '''for i in all_blocks:
         if i != active:
+            print(9.7)
             i.run_down()
+            print(9.8)'''
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
     screen.blit(cropped, (0, 0))
     active.update()
     all_blocks.draw(screen)
     all_sprites.draw(screen)
-    clock.tick(fps)
     points.draw(screen)
     lines.draw(screen)
+    clock.tick(fps)
     pygame.display.flip()
 pygame.quit()
