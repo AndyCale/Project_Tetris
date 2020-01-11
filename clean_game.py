@@ -48,7 +48,10 @@ class Block(pygame.sprite.Sprite):
             colorkey = (0, 0, 0, 255)
             self.image.set_colorkey(colorkey)
             self.rect = pygame.Rect(rect[0], rect[1], rect[2], rect[3])
-        self.mask = pygame.mask.from_surface(self.image)
+        '''self.cut()
+        colorkey = (0, 0, 0, 255)
+        self.image.set_colorkey(colorkey)
+        self.mask = pygame.mask.from_surface(self.image)'''
 
     def update(self):
         global flag
@@ -96,8 +99,6 @@ class Block(pygame.sprite.Sprite):
         while not pygame.sprite.collide_mask(self, down) and len([1 for i in all_blocks
                                                                   if pygame.sprite.collide_mask(self, i) != None]) == 1:
             self.rect[1] += 1
-            all_blocks.draw(screen)
-        print(self.rect)
 
     def cut(self):
         w, h = self.image.get_size()
@@ -290,7 +291,6 @@ while running:
     for i in all_blocks:
         if i != active:
             i.run_down()
-                #i.cut()
     cropped = pygame.Surface((200, 200))
     cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
     screen.blit(cropped, (0, 0))

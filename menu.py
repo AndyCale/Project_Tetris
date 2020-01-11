@@ -361,5 +361,6 @@ def game():
         pygame.display.flip()
 
 
+start_screen()
 menu()
 pygame.quit()
