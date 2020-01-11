@@ -66,9 +66,6 @@ class Block(pygame.sprite.Sprite):
                     cells.append(pnt[i])
             board.add(cells)
             flag = True
-            '''for i in all_blocks:
-                print(i.rect, i.mask, i.image)'''
-
 
     def run(self, s):
         if s == "l":
@@ -145,8 +142,6 @@ class Board:
                 for i in range(line, 0, -1):
                     self.board[i] = self.board[i - 1]
                 print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
-        '''for i in all_blocks:
-            i.run_down()'''
 
     def delete_line(self, line):
         line_spr = Line(line * 50 + 25 + height % 50)
@@ -162,14 +157,14 @@ class Board:
                 all_blocks.remove(block)
             elif line_spr.rect[1] - block.rect[1] > 50:
                 print(2, block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50)
-                cropped_bl = pygame.Surface((block.rect[2], ((line_spr.rect[1] - block.rect[1]) // 50 - 1) * 50))
-                cropped_bl.blit(block.image, (0, 0), (0, 0, block.rect[2], ((line_spr.rect[1] - block.rect[1]) // 50 - 1) * 50))
-                Block(cropped_bl, (block.rect[0], block.rect[1], block.rect[2], ((line_spr.rect[1] - block.rect[1]) // 50 - 1) * 50))
+                cropped_bl = pygame.Surface((block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50))
+                cropped_bl.blit(block.image, (0, 0), (0, 0, block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50))
+                Block(cropped_bl, (block.rect[0], block.rect[1], block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50))
                 all_blocks.remove(block)
             elif block.rect[1] + block.rect[3] - line_spr.rect[1] > 50:
                 print(3, block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) % 50 * 50)
                 cropped_bl = pygame.Surface((block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) % 50 * 50))
-                cropped_bl.blit(block.image, (0, 0), (0, 0, block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) % 50 * 50))
+                cropped_bl.blit(block.image, (0, 0), (0, (line_spr.rect[1] // 50 + 1) * 50, block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) % 50 * 50))
                 Block(cropped_bl, (block.rect[0], (line_spr.rect[1] // 50 + 1) * 50, block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) % 50 * 50))
                 all_blocks.remove(block)
             else:
