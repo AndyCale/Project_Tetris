@@ -245,7 +245,6 @@ while running:
                 active.run_down()
             if event.key == pygame.K_DOWN:
                 active.image = pygame.transform.rotate(active.image, 90)
-                rct = active.rect[2:]
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
                 '''while pygame.sprite.collide_mask(active, l) != None:
@@ -260,28 +259,40 @@ while running:
                     active.image = pygame.transform.rotate(active.image, -90)
                     active.rect[2], active.rect[3] = rct[0], rct[1]
                     active.mask = pygame.mask.from_surface(active.image)'''
-                while pygame.sprite.collide_mask(active, l) != None or \
+                '''while pygame.sprite.collide_mask(active, l) != None or \
                         len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.rect[0] += 50
                 while pygame.sprite.collide_mask(active, r) != None or \
                         len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] -= 50
-                while pygame.sprite.collide_mask(active, down) != None or len(
-                        [1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[1] -= 1
+                    active.rect[0] -= 50'''
+                if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
+                    active.image = pygame.transform.rotate(active.image, -90)
+                    active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
+                    active.mask = pygame.mask.from_surface(active.image)
+                else:
+                    while pygame.sprite.collide_mask(active, down) is not None or\
+                            len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
+                        active.rect[1] -= 1
+                    while pygame.sprite.collide_mask(active, l) is not None:
+                        active.rect[0] += 50
+                    while pygame.sprite.collide_mask(active, r) is not None:
+                        active.rect[0] -= 50
             if event.key == pygame.K_UP:
                 active.image = pygame.transform.rotate(active.image, -90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
-                while pygame.sprite.collide_mask(active, l) != None or \
-                        len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] += 50
-                while pygame.sprite.collide_mask(active, r) != None or \
-                        len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] -= 50
-                while pygame.sprite.collide_mask(active, down) != None or len(
-                        [1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[1] -= 1
+                if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
+                    active.image = pygame.transform.rotate(active.image, 90)
+                    active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
+                    active.mask = pygame.mask.from_surface(active.image)
+                else:
+                    while pygame.sprite.collide_mask(active, down) is not None or len(
+                            [1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
+                        active.rect[1] -= 1
+                    while pygame.sprite.collide_mask(active, l) is not None:
+                        active.rect[0] += 50
+                    while pygame.sprite.collide_mask(active, r) is not None:
+                        active.rect[0] -= 50
 
     if flag:
         active = Block()
