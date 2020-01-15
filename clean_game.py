@@ -5,7 +5,8 @@ from PIL import Image
 
 
 pygame.init()
-size = width, height = 615, 800
+size = (900, 800)
+width, height = 615, 800
 screen = pygame.display.set_mode(size)
 
 fps = 50
@@ -48,15 +49,23 @@ class Block(pygame.sprite.Sprite):
             colorkey = (0, 0, 0, 255)
             self.image.set_colorkey(colorkey)
             self.rect = pygame.Rect(rect[0], rect[1], rect[2], rect[3])
-        self.mask = pygame.mask.from_surface(self.image)
-        self.cut()
+        self.image = self.cut()
+        if self.image is not None:
+            colorkey = (0, 0, 0, 255)
+            self.image.set_colorkey(colorkey)
+            self.mask = pygame.mask.from_surface(self.image)
+            self.rect[2] = int(str(self.image).split("(")[1].split("x")[0])
+            self.rect[3] = int(str(self.image).split("(")[1].split("x")[1])
+
+        '''self.mask = pygame.mask.from_surface(self.image)
+        self.image = self.cut()'''
 
     def update(self):
         global flag
         if not pygame.sprite.collide_mask(self, down) and\
                 (not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_blocks]) or
                  len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1):
-            self.rect[1] += 1
+            self.rect[1] += speed
         else:
             cells = []
             for i in pygame.sprite.spritecollide(self, points, False):
@@ -114,7 +123,7 @@ class Block(pygame.sprite.Sprite):
         else:
             print(22222222222222222222)
             #self.image.blit(self.image, (0, 0), self.rect)
-            #all_blocks.remove(self)
+            all_blocks.remove(self)
 
 
 class Border(pygame.sprite.Sprite):
@@ -201,6 +210,12 @@ pix = image.load()
 for j in range(height):
     pix[0, j] = (0, 0, 0)
 image.save("data//vert.png")
+image = Image.new("RGB", (size[0] - width, height), (0, 0, 0))
+pix = image.load()
+for i in range(size[0] - width):
+    for j in range(height):
+        pix[i, j] = (50, 50, 50)
+image.save("data//fast_menu.png")
 
 
 all_sprites = pygame.sprite.Group()
@@ -218,17 +233,19 @@ for i in range(width // 50):
     for j in range(height // 50):
         pnt[Point(i * 50 + 25 + width % 50, j * 50 + 25 + height % 50, points)] = (j, i)
 
-for i in range(width // 50):
-    for j in range(height // 50):
+for i in range(width // 50 + 1):
+    for j in range(height // 50 + 1):
         Point(i * 50 + 5, j * 50 - 5, points_vis)
 
 down = Border(horiz_bord, "horiz.png")
 l = Border(vert_bord_l, "vert.png")
 r = Border(vert_bord_r, "vert.png")
+fast_menu = load_image("fast_menu.png")
 
 flag = True
 active = 0
 k = 1
+speed = 1
 
 while running:
     screen.fill((0, 0, 0))
@@ -314,6 +331,7 @@ while running:
     all_sprites.draw(screen)
     points_vis.draw(screen)
     lines.draw(screen)
+    screen.blit(fast_menu, (width, 0))
     clock.tick(fps)
     pygame.display.flip()
 pygame.quit()
