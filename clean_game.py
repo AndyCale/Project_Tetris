@@ -2,6 +2,7 @@ import pygame
 import os
 from random import choice
 from PIL import Image
+from time import perf_counter
 
 
 pygame.init()
@@ -56,7 +57,6 @@ class Block(pygame.sprite.Sprite):
             self.mask = pygame.mask.from_surface(self.image)
             self.rect[2] = int(str(self.image).split("(")[1].split("x")[0])
             self.rect[3] = int(str(self.image).split("(")[1].split("x")[1])
-
         '''self.mask = pygame.mask.from_surface(self.image)
         self.image = self.cut()'''
 
@@ -93,6 +93,8 @@ class Block(pygame.sprite.Sprite):
                 self.rect[0] -= 50
 
     def run_down(self):
+        global score
+
         '''while not pygame.sprite.collide_mask(self, down) and\
                 (not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_blocks]) or
                  len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1):'''
@@ -145,10 +147,13 @@ class Board:
         self.board = [[0] * wid for _ in range(hei)]
 
     def add(self, cells):
+        global score
+
         for cell in cells:
             self.board[cell[0]][cell[1]] = 1
         for line in range(len(self.board)):
             if all(self.board[line]):
+                score += 100
                 self.delete_line(line)
                 print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
                 print(1)
@@ -246,6 +251,8 @@ flag = True
 active = 0
 k = 1
 speed = 1
+score = 0
+time = perf_counter()
 
 while running:
     screen.fill((0, 0, 0))
@@ -320,6 +327,10 @@ while running:
         active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
         active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
         flag = False
+        if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
+            running = False
+        else:
+            score += 15
     for i in all_blocks:
         if i != active:
             i.run_down()
@@ -332,6 +343,31 @@ while running:
     points_vis.draw(screen)
     lines.draw(screen)
     screen.blit(fast_menu, (width, 0))
+
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 90, 160, 160))
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 340, 220, 50))
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 470, 220, 50))
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 80, 90, 160, 160), 1)
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 340, 220, 50), 1)
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 470, 220, 50), 1)
+
+    mint = str(int(perf_counter() - time) // 60).rjust(2, "0")
+    sec = str(int(perf_counter() - time) % 60).rjust(2, "0")
+    mil = str(int((perf_counter() - time) * 100 % 100)).rjust(2, "0")
+
+    font = pygame.font.Font(None, 50)
+
+    text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
+    text_x = 715
+    text_y = 350
+    screen.blit(text, (text_x, text_y))
+
+    text = font.render(str(score), 1, (255, 255, 255))
+    text_w = text.get_width()
+    text_x = 854 - text_w
+    text_y = 479
+    screen.blit(text, (text_x, text_y))
+
     clock.tick(fps)
     pygame.display.flip()
 pygame.quit()
