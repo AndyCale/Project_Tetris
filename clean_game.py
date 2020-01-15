@@ -108,13 +108,6 @@ class Block(pygame.sprite.Sprite):
     def run_down(self):
         global score
 
-        '''while not pygame.sprite.collide_mask(self, down) and\
-                (not any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_blocks]) or
-                 len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1):'''
-        '''print(self.rect, pygame.sprite.collide_mask(self, down),
-                  any([pygame.sprite.collide_mask(self, i) not in ((0, 0), None) for i in all_blocks]),
-                  len([1 for i in all_blocks if pygame.sprite.collide_mask(self, i) != None]) == 1)'''
-            #self.rect[1] += 1
         while not pygame.sprite.collide_mask(self, down) and len([1 for i in all_blocks
                                                                   if pygame.sprite.collide_mask(self, i) != None]) == 1:
             self.rect[1] += 1
@@ -269,6 +262,7 @@ speed = 1
 score = 0
 time = perf_counter()
 next_image = next_block()
+#game = True
 
 while running:
     screen.fill((0, 0, 0))
@@ -277,6 +271,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pass
             if event.key == pygame.K_LEFT:
                 active.run("l")
             if event.key == pygame.K_RIGHT:
@@ -343,12 +339,14 @@ while running:
     lines.draw(screen)
     screen.blit(fast_menu, (width, 0))
 
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 90, 160, 160))
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 340, 220, 50))
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 470, 220, 50))
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 80, 90, 160, 160), 1)
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 340, 220, 50), 1)
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 470, 220, 50), 1)
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 100, 160, 160))
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 360, 220, 50))
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 510, 220, 50))
+    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 660, 220, 50))
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 80, 100, 160, 160), 1)
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 360, 220, 50), 1)
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 510, 220, 50), 1)
+    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 660, 220, 50), 1)
 
     mint = str(int(perf_counter() - time) // 60).rjust(2, "0")
     sec = str(int(perf_counter() - time) % 60).rjust(2, "0")
@@ -358,17 +356,26 @@ while running:
 
     text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
     text_x = 715
-    text_y = 350
+    text_y = 370
+    screen.blit(text, (text_x, text_y))
+    text = font.render(str(score), 1, (255, 255, 255))
+    text_x = 854 - text.get_width()
+    text_y = 520
     screen.blit(text, (text_x, text_y))
 
-    text = font.render(str(score), 1, (255, 255, 255))
-    text_w = text.get_width()
-    text_x = 854 - text_w
-    text_y = 479
+    font = pygame.font.Font(None, 70)
+    text = font.render("Далее:", 1, (0, 0, 0))
+    text_x = width + (size[0] - width) // 2 - 85
+    text_y = 35
     screen.blit(text, (text_x, text_y))
+    for i in range(3):
+        text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (0, 0, 0))
+        text_x = width + (size[0] - width) // 2 - 100
+        text_y = 300 + i * 150
+        screen.blit(text, (text_x, text_y))
 
     next_min = pygame.transform.scale(next_image[0], (150, 150))
-    screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 95))
+    screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
 
     clock.tick(fps)
     pygame.display.flip()
