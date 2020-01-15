@@ -3,6 +3,7 @@ import os
 from random import choice
 from PIL import Image
 from time import perf_counter
+from copy import copy
 
 
 pygame.init()
@@ -34,17 +35,29 @@ def color_block(block, color):
                 block.set_at((x, y), color)
 
 
+def next_block():
+    img = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]))
+    color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
+    if choice([0, 1]):
+        img = pygame.transform.flip(img, 1, 0)
+    color_block(img, color)
+    rect = pygame.Rect(256, 0, 150, 200)
+    print(img, rect)
+    return (img, rect)
+
+
 class Block(pygame.sprite.Sprite):
-    def __init__(self, img=None, rect=None):
+    def __init__(self, img=None, rect=None, nxt=None):
         super().__init__(all_blocks)
-        #self.name =
         if img is None:
-            self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]))
+            '''self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]))
             color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
             if choice([0, 1]):
                 self.image = pygame.transform.flip(self.image, 1, 0)
             color_block(self.image, color)
-            self.rect = pygame.Rect(256, 0, 150, 200)
+            self.rect = pygame.Rect(256, 0, 150, 200)'''
+            self.image = nxt[0]
+            self.rect = nxt[1]
         else:
             self.image = img
             colorkey = (0, 0, 0, 255)
@@ -232,6 +245,7 @@ board = Board(width // 50, height // 50)
 points = pygame.sprite.Group()
 lines = pygame.sprite.Group()
 points_vis = pygame.sprite.Group()
+next_qroup_block = pygame.sprite.Group()
 
 pnt = {}
 for i in range(width // 50):
@@ -247,12 +261,14 @@ l = Border(vert_bord_l, "vert.png")
 r = Border(vert_bord_r, "vert.png")
 fast_menu = load_image("fast_menu.png")
 
+
 flag = True
 active = 0
 k = 1
 speed = 1
 score = 0
 time = perf_counter()
+next_image = next_block()
 
 while running:
     screen.fill((0, 0, 0))
@@ -271,24 +287,6 @@ while running:
                 active.image = pygame.transform.rotate(active.image, 90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
-                '''while pygame.sprite.collide_mask(active, l) != None:
-                    active.rect[0] += 50
-                while pygame.sprite.collide_mask(active, r) != None:
-                    active.rect[0] -= 50
-                if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] += 50
-                if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] -= 100
-                if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.image = pygame.transform.rotate(active.image, -90)
-                    active.rect[2], active.rect[3] = rct[0], rct[1]
-                    active.mask = pygame.mask.from_surface(active.image)'''
-                '''while pygame.sprite.collide_mask(active, l) != None or \
-                        len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] += 50
-                while pygame.sprite.collide_mask(active, r) != None or \
-                        len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
-                    active.rect[0] -= 50'''
                 if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) != None]) > 1:
                     active.image = pygame.transform.rotate(active.image, -90)
                     active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
@@ -319,7 +317,8 @@ while running:
                         active.rect[0] -= 50
 
     if flag:
-        active = Block()
+        active = Block(None, None, next_image)
+        next_image = next_block()
         active.image = active.cut()
         colorkey = (0, 0, 0, 255)
         active.image.set_colorkey(colorkey)
@@ -367,6 +366,9 @@ while running:
     text_x = 854 - text_w
     text_y = 479
     screen.blit(text, (text_x, text_y))
+
+    next_min = pygame.transform.scale(next_image[0], (150, 150))
+    screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 95))
 
     clock.tick(fps)
     pygame.display.flip()
