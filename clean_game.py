@@ -221,13 +221,6 @@ pix = image.load()
 for j in range(height):
     pix[0, j] = (0, 0, 0)
 image.save("data//vert.png")
-image = Image.new("RGB", (size[0] - width, height), (0, 0, 0))
-pix = image.load()
-for i in range(size[0] - width):
-    for j in range(height):
-        pix[i, j] = (50, 50, 50)
-image.save("data//fast_menu.png")
-
 
 all_sprites = pygame.sprite.Group()
 all_blocks = pygame.sprite.Group()
@@ -252,7 +245,6 @@ for i in range(width // 50 + 1):
 down = Border(horiz_bord, "horiz.png")
 l = Border(vert_bord_l, "vert.png")
 r = Border(vert_bord_r, "vert.png")
-fast_menu = load_image("fast_menu.png")
 
 
 flag = True
@@ -337,8 +329,8 @@ while running:
     all_sprites.draw(screen)
     points_vis.draw(screen)
     lines.draw(screen)
-    screen.blit(fast_menu, (width, 0))
 
+    pygame.draw.rect(screen, (50, 50, 50), (width, 0, size[0] - width, height))
     pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 100, 160, 160))
     pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 360, 220, 50))
     pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 510, 220, 50))
