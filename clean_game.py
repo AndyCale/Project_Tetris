@@ -3,7 +3,6 @@ import os
 from random import choice
 from PIL import Image
 from time import perf_counter
-from copy import copy
 
 
 pygame.init()
@@ -254,24 +253,25 @@ speed = 1
 score = 0
 time = perf_counter()
 next_image = next_block()
-#game = True
+game = True
+#game = False
+active_menu = ""
 
 while running:
-    screen.fill((0, 0, 0))
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                pass
-            if event.key == pygame.K_LEFT:
+                game = False
+                speed = 0
+            if event.key == pygame.K_LEFT and game:
                 active.run("l")
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT and game:
                 active.run("r")
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and game:
                 active.run_down()
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN and game:
                 active.image = pygame.transform.rotate(active.image, 90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
@@ -287,7 +287,7 @@ while running:
                         active.rect[0] += 50
                     while pygame.sprite.collide_mask(active, r) is not None:
                         active.rect[0] -= 50
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and game:
                 active.image = pygame.transform.rotate(active.image, -90)
                 active.rect[2], active.rect[3] = active.rect[3], active.rect[2]
                 active.mask = pygame.mask.from_surface(active.image)
@@ -304,70 +304,143 @@ while running:
                     while pygame.sprite.collide_mask(active, r) is not None:
                         active.rect[0] -= 50
 
-    if flag:
-        active = Block(None, None, next_image)
-        next_image = next_block()
-        active.image = active.cut()
-        colorkey = (0, 0, 0, 255)
-        active.image.set_colorkey(colorkey)
-        active.mask = pygame.mask.from_surface(active.image)
-        active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
-        active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
-        flag = False
-        if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
-            running = False
-        else:
-            score += 15
-    for i in all_blocks:
-        if i != active:
-            i.run_down()
-    '''cropped = pygame.Surface((200, 200))
-    cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
-    screen.blit(cropped, (0, 0))'''
-    active.update()
-    all_blocks.draw(screen)
-    all_sprites.draw(screen)
-    points_vis.draw(screen)
-    lines.draw(screen)
+        if not game:
+            pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400))
+            pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400), 1)
 
-    pygame.draw.rect(screen, (50, 50, 50), (width, 0, size[0] - width, height))
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 100, 160, 160))
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 360, 220, 50))
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 510, 220, 50))
-    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 660, 220, 50))
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 80, 100, 160, 160), 1)
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 360, 220, 50), 1)
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 510, 220, 50), 1)
-    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 660, 220, 50), 1)
+            font = pygame.font.Font(None, 70)
+            text = font.render("Пауза", 1, (20, 20, 20))
+            text_x = size[0] // 2 - text.get_width() // 2
+            text_y = 230
+            screen.blit(text, (text_x, text_y))
 
-    mint = str(int(perf_counter() - time) // 60).rjust(2, "0")
-    sec = str(int(perf_counter() - time) % 60).rjust(2, "0")
-    mil = str(int((perf_counter() - time) * 100 % 100)).rjust(2, "0")
+            font = pygame.font.Font(None, 50)
 
-    font = pygame.font.Font(None, 50)
+            for i in range(4):
+                pygame.draw.rect(screen,
+                                 ((140, 200, 200), (200, 140, 200), (200, 200, 140), (140, 200, 140))[i],
+                                 (310, 300 + i * 70, 280, 50))
+                pygame.draw.rect(screen, (0, 0, 0), (310, 300 + i * 70, 280, 50), 1)
 
-    text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
-    text_x = 715
-    text_y = 370
-    screen.blit(text, (text_x, text_y))
-    text = font.render(str(score), 1, (255, 255, 255))
-    text_x = 854 - text.get_width()
-    text_y = 520
-    screen.blit(text, (text_x, text_y))
+                text = font.render(["Продолжить", "Перезапустить", "Помощь", "Главное меню"][i], 1,
+                                   (40, 40, 40))
+                text_x = size[0] // 2 - text.get_width() // 2
+                text_y = 308 + i * 70
+                screen.blit(text, (text_x, text_y))
 
-    font = pygame.font.Font(None, 70)
-    text = font.render("Далее:", 1, (0, 0, 0))
-    text_x = width + (size[0] - width) // 2 - 85
-    text_y = 35
-    screen.blit(text, (text_x, text_y))
-    for i in range(3):
-        text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (0, 0, 0))
-        text_x = width + (size[0] - width) // 2 - 100
-        text_y = 300 + i * 150
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                pos = event.pos
+                if 310 <= pos[0] <= 590 and 300 <= pos[1] <= 350:
+                    active_menu = "game"
+                elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420:
+                    active_menu = "replay"
+                elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490:
+                    active_menu = "help"
+                elif 310 <= pos[0] <= 590 and 510 <= pos[1] <= 560:
+                    active_menu = "exit"
+
+            if pygame.mouse.get_focused():
+                pos = pygame.mouse.get_pos()
+
+                if 310 <= pos[0] <= 590 and 300 <= pos[1] <= 350:
+                    pygame.draw.rect(screen, (140, 250, 250), (310, 300, 280, 50))
+                    pygame.draw.rect(screen, (0, 0, 0), (310, 300, 280, 50), 1)
+                    text = font.render("Продолжить", 1, (40, 40, 40))
+                    text_x = size[0] // 2 - text.get_width() // 2
+                    text_y = 308
+                    screen.blit(text, (text_x, text_y))
+
+                elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420:
+                    pygame.draw.rect(screen, (250, 140, 250), (310, 370, 280, 50))
+                    pygame.draw.rect(screen, (0, 0, 0), (310, 370, 280, 50), 1)
+                    text = font.render("Перезапустить", 1, (40, 40, 40))
+                    text_x = size[0] // 2 - text.get_width() // 2
+                    text_y = 378
+                    screen.blit(text, (text_x, text_y))
+
+                elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490:
+                    pygame.draw.rect(screen, (250, 250, 140), (310, 440, 280, 50))
+                    pygame.draw.rect(screen, (0, 0, 0), (310, 440, 280, 50), 1)
+                    text = font.render("Помощь", 1, (40, 40, 40))
+                    text_x = size[0] // 2 - text.get_width() // 2
+                    text_y = 448
+                    screen.blit(text, (text_x, text_y))
+
+                elif 310 <= pos[0] <= 590 and 510 <= pos[1] <= 560:
+                    pygame.draw.rect(screen, (140, 250, 140), (310, 510, 280, 50))
+                    pygame.draw.rect(screen, (0, 0, 0), (310, 510, 280, 50), 1)
+                    text = font.render("Главное меню", 1, (40, 40, 40))
+                    text_x = size[0] // 2 - text.get_width() // 2
+                    text_y = 518
+                    screen.blit(text, (text_x, text_y))
+
+    if game:
+        screen.fill((0, 0, 0))
+        if flag:
+            active = Block(None, None, next_image)
+            next_image = next_block()
+            active.image = active.cut()
+            colorkey = (0, 0, 0, 255)
+            active.image.set_colorkey(colorkey)
+            active.mask = pygame.mask.from_surface(active.image)
+            active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
+            active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
+            flag = False
+            if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
+                running = False
+            else:
+                score += 15
+        if game:
+            for i in all_blocks:
+                if i != active:
+                    i.run_down()
+        '''cropped = pygame.Surface((200, 200))
+        cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
+        screen.blit(cropped, (0, 0))'''
+        active.update()
+        all_blocks.draw(screen)
+        all_sprites.draw(screen)
+        points_vis.draw(screen)
+        lines.draw(screen)
+
+        pygame.draw.rect(screen, (50, 50, 50), (width, 0, size[0] - width, height))
+        pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 100, 160, 160))
+        pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 360, 220, 50))
+        pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 510, 220, 50))
+        pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 660, 220, 50))
+        pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 80, 100, 160, 160), 1)
+        pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 360, 220, 50), 1)
+        pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 510, 220, 50), 1)
+        pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 660, 220, 50), 1)
+
+        mint = str(int(perf_counter() - time) // 60).rjust(2, "0")
+        sec = str(int(perf_counter() - time) % 60).rjust(2, "0")
+        mil = str(int((perf_counter() - time) * 100 % 100)).rjust(2, "0")
+
+        font = pygame.font.Font(None, 50)
+
+        text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
+        text_x = 715
+        text_y = 370
+        screen.blit(text, (text_x, text_y))
+        text = font.render(str(score), 1, (255, 255, 255))
+        text_x = 854 - text.get_width()
+        text_y = 520
         screen.blit(text, (text_x, text_y))
 
-    next_min = pygame.transform.scale(next_image[0], (150, 150))
-    screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
+        font = pygame.font.Font(None, 70)
+        text = font.render("Далее:", 1, (0, 0, 0))
+        text_x = width + (size[0] - width) // 2 - 85
+        text_y = 35
+        screen.blit(text, (text_x, text_y))
+        for i in range(3):
+            text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (0, 0, 0))
+            text_x = width + (size[0] - width) // 2 - 100
+            text_y = 300 + i * 150
+            screen.blit(text, (text_x, text_y))
+
+        next_min = pygame.transform.scale(next_image[0], (150, 150))
+        screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
 
     clock.tick(fps)
     pygame.display.flip()
