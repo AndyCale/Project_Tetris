@@ -336,14 +336,25 @@ while running:
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = event.pos
-                if 310 <= pos[0] <= 590 and 300 <= pos[1] <= 350:
-                    active_menu = "game"
-                elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420:
+                if 310 <= pos[0] <= 590 and 300 <= pos[1] <= 350 and active_menu == "":
+                    active_menu = ""
+                    game = True
+                elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420 and active_menu == "":
                     active_menu = "replay"
-                elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490:
+                elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490 and active_menu == "":
                     active_menu = "help"
-                elif 310 <= pos[0] <= 590 and 510 <= pos[1] <= 560:
+                    #rules()
+                elif 310 <= pos[0] <= 590 and 510 <= pos[1] <= 560 and active_menu == "":
                     active_menu = "exit"
+                elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420 and active_menu in ["exit", "replay"]:
+                    if active_menu == "exit":
+                        running = False
+                        # terminated()
+                    else:
+                        pass
+                        # как-то перезапускать игру
+                elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490 and active_menu in ["exit", "replay"]:
+                    active_menu = ""
 
             if pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
@@ -413,6 +424,7 @@ while running:
                         screen.blit(text, (text_x, text_y))
 
             if active_menu == "replay":
+                font = pygame.font.Font(None, 50)
                 for i in range(3):
                     text = font.render(("Вы уверены, что хотите", "перезапустить игру? Ваш", "прогресс будет потерян")[i], 1, (20, 20, 20))
                     text_x = 250
@@ -420,10 +432,12 @@ while running:
                     screen.blit(text, (text_x, text_y))
 
             if active_menu == "exit":
-                text = font.render("Пауза", 1, (20, 20, 20))
-                text_x = 340
-                text_y = 350
-                screen.blit(text, (text_x, text_y))
+                font = pygame.font.Font(None, 50)
+                for i in range(3):
+                    text = font.render(("Вы уверены, что хотите", "выйти из игры? Ваш", "прогресс будет потерян")[i], 1, (20, 20, 20))
+                    text_x = 250
+                    text_y = 300 + 40 * i
+                    screen.blit(text, (text_x, text_y))
 
     if game:
         screen.fill((0, 0, 0))
