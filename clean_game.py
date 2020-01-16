@@ -310,28 +310,29 @@ while running:
                         active.rect[0] -= 50
 
         if not game:
-            pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400))
-            pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400), 1)
+            if active_menu == "":
+                pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400))
+                pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400), 1)
 
-            font = pygame.font.Font(None, 70)
-            text = font.render("Пауза", 1, (20, 20, 20))
-            text_x = size[0] // 2 - text.get_width() // 2
-            text_y = 230
-            screen.blit(text, (text_x, text_y))
-
-            font = pygame.font.Font(None, 50)
-
-            for i in range(4):
-                pygame.draw.rect(screen,
-                                 ((140, 200, 200), (200, 140, 200), (200, 200, 140), (140, 200, 140))[i],
-                                 (310, 300 + i * 70, 280, 50))
-                pygame.draw.rect(screen, (0, 0, 0), (310, 300 + i * 70, 280, 50), 1)
-
-                text = font.render(["Продолжить", "Перезапустить", "Помощь", "Главное меню"][i], 1,
-                                   (40, 40, 40))
+                font = pygame.font.Font(None, 70)
+                text = font.render("Пауза", 1, (20, 20, 20))
                 text_x = size[0] // 2 - text.get_width() // 2
-                text_y = 308 + i * 70
+                text_y = 230
                 screen.blit(text, (text_x, text_y))
+
+                font = pygame.font.Font(None, 50)
+
+                for i in range(4):
+                    pygame.draw.rect(screen,
+                                     ((140, 200, 200), (200, 140, 200), (200, 200, 140), (140, 200, 140))[i],
+                                     (310, 300 + i * 70, 280, 50))
+                    pygame.draw.rect(screen, (0, 0, 0), (310, 300 + i * 70, 280, 50), 1)
+
+                    text = font.render(["Продолжить", "Перезапустить", "Помощь", "Главное меню"][i], 1,
+                                       (40, 40, 40))
+                    text_x = size[0] // 2 - text.get_width() // 2
+                    text_y = 308 + i * 70
+                    screen.blit(text, (text_x, text_y))
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = event.pos
@@ -346,6 +347,7 @@ while running:
 
             if pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
+                font = pygame.font.Font(None, 50)
 
                 if 310 <= pos[0] <= 590 and 300 <= pos[1] <= 350:
                     pygame.draw.rect(screen, (140, 250, 250), (310, 300, 280, 50))
@@ -380,44 +382,48 @@ while running:
                     screen.blit(text, (text_x, text_y))
 
                 if active_menu == "replay" or active_menu == "exit":
-                    pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 100, 330, 200))
-                    pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 100, 330, 200), 1)
+                    pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 230, size[1] // 2 - 130, 460, 260))
+                    pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 230, size[1] // 2 - 130, 460, 260), 1)
 
                     for i in range(2):
-                        pygame.draw.rect(screen, ((140, 200, 140), (200, 140, 200))[i], (340 + i * 140, 430, 80, 40))
-                        pygame.draw.rect(screen, (0, 0, 0), (340 + i * 140, 430, 80, 40), 1)
+                        pygame.draw.rect(screen, ((140, 200, 140), (200, 140, 200))[i], (325 + i * 170, 450, 80, 40))
+                        pygame.draw.rect(screen, (0, 0, 0), (325 + i * 170, 450, 80, 40), 1)
 
                         text = font.render(["Да", "Нет"][i], 1, (40, 40, 40))
-                        text_x = 355 + i * 135
-                        text_y = 434
+                        text_x = 340 + i * 165
+                        text_y = 454
                         screen.blit(text, (text_x, text_y))
 
-                    if 340 <= pos[0] <= 420 and 430 <= pos[1] <= 470:
-                        pygame.draw.rect(screen, (140, 250, 140), (340, 430, 80, 40))
-                        pygame.draw.rect(screen, (0, 0, 0), (340, 430, 80, 40), 1)
+                    if 325 <= pos[0] <= 405 and 450 <= pos[1] <= 490:
+                        pygame.draw.rect(screen, (140, 250, 140), (325, 450, 80, 40))
+                        pygame.draw.rect(screen, (0, 0, 0), (325, 450, 80, 40), 1)
 
                         text = font.render("Да", 1, (40, 40, 40))
-                        text_x = 355
-                        text_y = 434
+                        text_x = 340
+                        text_y = 454
                         screen.blit(text, (text_x, text_y))
 
-                    elif 480 <= pos[0] <= 560 and 430 <= pos[1] <= 470:
-                        pygame.draw.rect(screen, (250, 140, 250), (480, 430, 80, 40))
-                        pygame.draw.rect(screen, (0, 0, 0), (480, 430, 80, 40), 1)
+                    elif 495 <= pos[0] <= 575 and 450 <= pos[1] <= 490:
+                        pygame.draw.rect(screen, (250, 140, 250), (495, 450, 80, 40))
+                        pygame.draw.rect(screen, (0, 0, 0), (495, 450, 80, 40), 1)
 
                         text = font.render("Нет", 1, (40, 40, 40))
-                        text_x = 490
-                        text_y = 434
+                        text_x = 505
+                        text_y = 454
                         screen.blit(text, (text_x, text_y))
 
             if active_menu == "replay":
-                font = pygame.font.Font(None, 70)
-                text = font.render("Пауза", 1, (20, 20, 20))
-                text_x = size[0] // 2 - text.get_width() // 2
-                text_y = 230
-                screen.blit(text, (text_x, text_y))
+                for i in range(3):
+                    text = font.render(("Вы уверены, что хотите", "перезапустить игру? Ваш", "прогресс будет потерян")[i], 1, (20, 20, 20))
+                    text_x = 250
+                    text_y = 300 + 40 * i
+                    screen.blit(text, (text_x, text_y))
 
-                font = pygame.font.Font(None, 50)
+            if active_menu == "exit":
+                text = font.render("Пауза", 1, (20, 20, 20))
+                text_x = 340
+                text_y = 350
+                screen.blit(text, (text_x, text_y))
 
     if game:
         screen.fill((0, 0, 0))
