@@ -256,6 +256,7 @@ time_pause = 0
 next_image = next_block()
 game = True
 active_menu = ""
+time_for_pause = []
 
 while running:
     for event in pygame.event.get():
@@ -339,6 +340,7 @@ while running:
                 if 310 <= pos[0] <= 590 and 300 <= pos[1] <= 350 and active_menu == "":
                     active_menu = ""
                     game = True
+                    time += perf_counter() - time_pause
                 elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420 and active_menu == "":
                     active_menu = "replay"
                 elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490 and active_menu == "":
@@ -355,6 +357,76 @@ while running:
                         # как-то перезапускать игру
                 elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490 and active_menu in ["exit", "replay"]:
                     active_menu = ""
+
+                    screen.fill((0, 0, 0))
+                    all_blocks.draw(screen)
+                    all_sprites.draw(screen)
+                    points_vis.draw(screen)
+                    lines.draw(screen)
+
+                    pygame.draw.rect(screen, (50, 50, 50), (width, 0, size[0] - width, height))
+                    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 80, 100, 160, 160))
+                    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 360, 220, 50))
+                    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 510, 220, 50))
+                    pygame.draw.rect(screen, (100, 100, 100), (width + (size[0] - width) // 2 - 110, 660, 220, 50))
+                    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 80, 100, 160, 160), 1)
+                    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 360, 220, 50), 1)
+                    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 510, 220, 50), 1)
+                    pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 660, 220, 50), 1)
+
+                    font = pygame.font.Font(None, 50)
+
+                    if len(time_for_pause) != 0:
+                        mint, sec, mil = time_for_pause
+                    else:
+                        mint, sec, mil = "00", "00", "00"
+
+                    text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
+                    text_x = 715
+                    text_y = 370
+                    screen.blit(text, (text_x, text_y))
+                    text = font.render(str(score), 1, (255, 255, 255))
+                    text_x = 854 - text.get_width()
+                    text_y = 520
+                    screen.blit(text, (text_x, text_y))
+
+                    font = pygame.font.Font(None, 70)
+                    text = font.render("Далее:", 1, (0, 0, 0))
+                    text_x = width + (size[0] - width) // 2 - 85
+                    text_y = 35
+                    screen.blit(text, (text_x, text_y))
+
+                    for i in range(3):
+                        text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (0, 0, 0))
+                        text_x = width + (size[0] - width) // 2 - 100
+                        text_y = 300 + i * 150
+                        screen.blit(text, (text_x, text_y))
+
+                    next_min = pygame.transform.scale(next_image[0], (150, 150))
+                    screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
+
+                    pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400))
+                    pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400), 1)
+
+                    font = pygame.font.Font(None, 70)
+                    text = font.render("Пауза", 1, (20, 20, 20))
+                    text_x = size[0] // 2 - text.get_width() // 2
+                    text_y = 230
+                    screen.blit(text, (text_x, text_y))
+
+                    font = pygame.font.Font(None, 50)
+
+                    for i in range(4):
+                        pygame.draw.rect(screen,
+                                         ((140, 200, 200), (200, 140, 200), (200, 200, 140), (140, 200, 140))[i],
+                                         (310, 300 + i * 70, 280, 50))
+                        pygame.draw.rect(screen, (0, 0, 0), (310, 300 + i * 70, 280, 50), 1)
+
+                        text = font.render(["Продолжить", "Перезапустить", "Помощь", "Главное меню"][i], 1,
+                                           (40, 40, 40))
+                        text_x = size[0] // 2 - text.get_width() // 2
+                        text_y = 308 + i * 70
+                        screen.blit(text, (text_x, text_y))
 
             if pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
@@ -481,6 +553,8 @@ while running:
         mint = str(int(perf_counter() - time) // 60).rjust(2, "0")
         sec = str(int(perf_counter() - time) % 60).rjust(2, "0")
         mil = str(int((perf_counter() - time) * 100 % 100)).rjust(2, "0")
+
+        time_for_pause = [mint, sec, mil]
 
         font = pygame.font.Font(None, 50)
 
