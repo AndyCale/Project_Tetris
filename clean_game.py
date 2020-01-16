@@ -252,9 +252,9 @@ k = 1
 speed = 1
 score = 0
 time = perf_counter()
+time_pause = 0
 next_image = next_block()
 game = True
-#game = False
 active_menu = ""
 
 while running:
@@ -263,8 +263,13 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                game = False
-                speed = 0
+                if game:
+                    game = False
+                    time_pause = perf_counter()
+                else:
+                    game = True
+                    time += perf_counter() - time_pause
+                    active_menu = ""
             if event.key == pygame.K_LEFT and game:
                 active.run("l")
             if event.key == pygame.K_RIGHT and game:
@@ -373,6 +378,46 @@ while running:
                     text_x = size[0] // 2 - text.get_width() // 2
                     text_y = 518
                     screen.blit(text, (text_x, text_y))
+
+                if active_menu == "replay" or active_menu == "exit":
+                    pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 100, 330, 200))
+                    pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 100, 330, 200), 1)
+
+                    for i in range(2):
+                        pygame.draw.rect(screen, ((140, 200, 140), (200, 140, 200))[i], (340 + i * 140, 430, 80, 40))
+                        pygame.draw.rect(screen, (0, 0, 0), (340 + i * 140, 430, 80, 40), 1)
+
+                        text = font.render(["Да", "Нет"][i], 1, (40, 40, 40))
+                        text_x = 355 + i * 135
+                        text_y = 434
+                        screen.blit(text, (text_x, text_y))
+
+                    if 340 <= pos[0] <= 420 and 430 <= pos[1] <= 470:
+                        pygame.draw.rect(screen, (140, 250, 140), (340, 430, 80, 40))
+                        pygame.draw.rect(screen, (0, 0, 0), (340, 430, 80, 40), 1)
+
+                        text = font.render("Да", 1, (40, 40, 40))
+                        text_x = 355
+                        text_y = 434
+                        screen.blit(text, (text_x, text_y))
+
+                    elif 480 <= pos[0] <= 560 and 430 <= pos[1] <= 470:
+                        pygame.draw.rect(screen, (250, 140, 250), (480, 430, 80, 40))
+                        pygame.draw.rect(screen, (0, 0, 0), (480, 430, 80, 40), 1)
+
+                        text = font.render("Нет", 1, (40, 40, 40))
+                        text_x = 490
+                        text_y = 434
+                        screen.blit(text, (text_x, text_y))
+
+            if active_menu == "replay":
+                font = pygame.font.Font(None, 70)
+                text = font.render("Пауза", 1, (20, 20, 20))
+                text_x = size[0] // 2 - text.get_width() // 2
+                text_y = 230
+                screen.blit(text, (text_x, text_y))
+
+                font = pygame.font.Font(None, 50)
 
     if game:
         screen.fill((0, 0, 0))
