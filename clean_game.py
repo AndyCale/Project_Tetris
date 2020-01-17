@@ -41,36 +41,26 @@ def next_block():
         img = pygame.transform.flip(img, 1, 0)
     color_block(img, color)
     rect = pygame.Rect(256, 0, 150, 200)
-    print(img, rect)
-    return (img, rect)
+    return img, rect
 
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, img=None, rect=None, nxt=None):
         super().__init__(all_blocks)
         if img is None:
-            '''self.image = load_image(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]))
-            color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
-            if choice([0, 1]):
-                self.image = pygame.transform.flip(self.image, 1, 0)
-            color_block(self.image, color)
-            self.rect = pygame.Rect(256, 0, 150, 200)'''
-            self.image = nxt[0]
-            self.rect = nxt[1]
+            self.image, self.rect = nxt[0], nxt[1]
         else:
             self.image = img
-            colorkey = (0, 0, 0, 255)
-            self.image.set_colorkey(colorkey)
             self.rect = pygame.Rect(rect[0], rect[1], rect[2], rect[3])
-        #self.image = self.cut()
-        if self.image is not None:
-            colorkey = (0, 0, 0, 255)
-            self.image.set_colorkey(colorkey)
-            self.mask = pygame.mask.from_surface(self.image)
-            self.rect[2] = int(str(self.image).split("(")[1].split("x")[0])
-            self.rect[3] = int(str(self.image).split("(")[1].split("x")[1])
-        '''self.mask = pygame.mask.from_surface(self.image)
-        self.image = self.cut()'''
+        print(self.rect)
+        self.image, self.rect = self.cut()[0], pygame.Rect(self.cut()[1])
+        color_key = (0, 0, 0, 255)
+        self.image.set_colorkey(color_key)
+        self.mask = pygame.mask.from_surface(self.image)
+        self.image, self.rect = self.cut()[0], pygame.Rect(self.cut()[1])
+        color_key = (0, 0, 0, 255)
+        self.image.set_colorkey(color_key)
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         global flag
@@ -122,18 +112,21 @@ class Block(pygame.sprite.Sprite):
             r += 1
         while all([self.image.get_at((x, h - t - 1))[:3] == (0, 0, 0) for x in range(w)]) and t < h - 1:
             t += 1
-        print(w, q, r, h, e, t)
-        for i in range(w // 5 - 1):
-            print(end="\n")
-            for j in range(h // 5 - 1):
-                print(0 if self.image.get_at((j * 5, i * 5)) == (0, 0, 0) else 1, end=" ")
+        #print(w, q, r, h, e, t)
+        '''for i in range(w):
+            print("\n")
+            for j in range(h):
+                #print(i, j, w, h)
+                #print(0 if self.image.get_at((j, i)) == (0, 0, 0) else 1, end=" ")
+                k = 0 if self.image.get_at((i, j)) == (0, 0, 0) else 1'''
         if w - r - q > 0 and h - t - e > 0:
             cropped = pygame.Surface((w - r - q, h - t - e))
             cropped.blit(self.image, (0, 0), (q, e, w - r - q, h - t - e))
-            screen.blit(cropped, (0, 0))
-            #return cropped
+            #screen.blit(cropped, (0, 0))
+            return cropped, (self.rect[0] + q, self.rect[1] + e, self.rect[2] - q - r, self.rect[3] - e - t)
         else:
             print(22222222222222222222)
+            print(self.rect)
             #self.image.blit(self.image, (0, 0), self.rect)
             all_blocks.remove(self)
 
@@ -170,6 +163,10 @@ class Board:
                 for i in range(line, 0, -1):
                     self.board[i] = self.board[i - 1]
                 print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
+        for i in range(len(self.board)):
+            print("\n")
+            for j in range(len(self.board[0])):
+                print(self.board[i][j], end=" ")
 
     def delete_line(self, line):
         line_spr = Line(line * 50 + 25 + height % 50)
@@ -254,7 +251,7 @@ r = Border(vert_bord_r, "vert.png")
 flag = True
 active = 0
 k = 1
-speed = 0
+speed = 1
 score = 0
 time = perf_counter()
 time_pause = 0
@@ -262,7 +259,6 @@ next_image = next_block()
 game = True
 active_menu = ""
 time_for_pause = []
-k = 1
 
 while running:
     for event in pygame.event.get():
@@ -523,12 +519,6 @@ while running:
         if flag:
             active = Block(None, None, next_image)
             next_image = next_block()
-            #active.image = active.cut()
-            colorkey = (0, 0, 0, 255)
-            active.image.set_colorkey(colorkey)
-            active.mask = pygame.mask.from_surface(active.image)
-            active.rect[2] = int(str(active.image).split("(")[1].split("x")[0])
-            active.rect[3] = int(str(active.image).split("(")[1].split("x")[1])
             flag = False
             if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
                 running = False
@@ -587,7 +577,6 @@ while running:
 
         next_min = pygame.transform.scale(next_image[0], (150, 150))
         screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
-    active.cut()
 
     clock.tick(fps)
     pygame.display.flip()
