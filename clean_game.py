@@ -62,7 +62,7 @@ class Block(pygame.sprite.Sprite):
             colorkey = (0, 0, 0, 255)
             self.image.set_colorkey(colorkey)
             self.rect = pygame.Rect(rect[0], rect[1], rect[2], rect[3])
-        self.image = self.cut()
+        #self.image = self.cut()
         if self.image is not None:
             colorkey = (0, 0, 0, 255)
             self.image.set_colorkey(colorkey)
@@ -122,11 +122,16 @@ class Block(pygame.sprite.Sprite):
             r += 1
         while all([self.image.get_at((x, h - t - 1))[:3] == (0, 0, 0) for x in range(w)]) and t < h - 1:
             t += 1
-        print(w, r, q, h, t, e)
+        print(w, q, r, h, e, t)
+        for i in range(w // 5 - 1):
+            print(end="\n")
+            for j in range(h // 5 - 1):
+                print(0 if self.image.get_at((j * 5, i * 5)) == (0, 0, 0) else 1, end=" ")
         if w - r - q > 0 and h - t - e > 0:
             cropped = pygame.Surface((w - r - q, h - t - e))
-            cropped.blit(self.image, (0, 0), (q, e, w - r, h - t))
-            return cropped
+            cropped.blit(self.image, (0, 0), (q, e, w - r - q, h - t - e))
+            screen.blit(cropped, (0, 0))
+            #return cropped
         else:
             print(22222222222222222222)
             #self.image.blit(self.image, (0, 0), self.rect)
@@ -249,7 +254,7 @@ r = Border(vert_bord_r, "vert.png")
 flag = True
 active = 0
 k = 1
-speed = 1
+speed = 0
 score = 0
 time = perf_counter()
 time_pause = 0
@@ -257,6 +262,7 @@ next_image = next_block()
 game = True
 active_menu = ""
 time_for_pause = []
+k = 1
 
 while running:
     for event in pygame.event.get():
@@ -517,7 +523,7 @@ while running:
         if flag:
             active = Block(None, None, next_image)
             next_image = next_block()
-            active.image = active.cut()
+            #active.image = active.cut()
             colorkey = (0, 0, 0, 255)
             active.image.set_colorkey(colorkey)
             active.mask = pygame.mask.from_surface(active.image)
@@ -581,6 +587,7 @@ while running:
 
         next_min = pygame.transform.scale(next_image[0], (150, 150))
         screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
+    active.cut()
 
     clock.tick(fps)
     pygame.display.flip()
