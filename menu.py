@@ -119,18 +119,6 @@ def menu():
 
                 elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
                     game()
-                    print(1)
-                    size = width, height = 550, 550
-                    screen = pygame.display.set_mode(size)
-                    screen.fill((0, 0, 0))
-
-                    for let in range(len("TeTris")):
-                        font = pygame.font.Font(None, 90)
-                        text = font.render("TeTris"[let], 1, (color_let[let]))
-                        text_x = 95 + let * 70
-                        text_y = 60
-                        screen.blit(text, (text_x, text_y))
-
                 elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
                     print("Рекорды")
                 elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
@@ -138,6 +126,30 @@ def menu():
                 elif 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
                     print(2)
                     ex = True
+
+                size = width, height = 550, 550
+                screen = pygame.display.set_mode(size)
+                screen.fill((0, 0, 0))
+
+                for let in range(len("TeTris")):
+                    font = pygame.font.Font(None, 90)
+                    text = font.render("TeTris"[let], 1, (color_let[let]))
+                    text_x = 95 + let * 70
+                    text_y = 60
+                    screen.blit(text, (text_x, text_y))
+
+                draw_button(0, (color[0][0] if color[0][0] <= 255 else 255,
+                                color[0][1] if color[0][1] <= 255 else 255,
+                                color[0][2] if color[0][2] <= 255 else 255))
+                draw_button(1, (color[1][0] if color[1][0] <= 255 else 255,
+                                color[1][1] if color[1][1] <= 255 else 255,
+                                color[1][2] if color[1][2] <= 255 else 255))
+                draw_button(2, (color[2][0] if color[2][0] <= 255 else 255,
+                                color[2][1] if color[2][1] <= 255 else 255,
+                                color[2][2] if color[2][2] <= 255 else 255))
+                draw_button(3, (color[3][0] if color[3][0] <= 255 else 255,
+                                color[3][1] if color[3][1] <= 255 else 255,
+                                color[3][2] if color[3][2] <= 255 else 255))
 
             elif pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
@@ -205,6 +217,7 @@ def menu():
                     draw_button(3, (color[3][0] if color[3][0] <= 255 else 255,
                                     color[3][1] if color[3][1] <= 255 else 255,
                                     color[3][2] if color[3][2] <= 255 else 255))
+
 
         pygame.display.flip()
         clock.tick(fps)
