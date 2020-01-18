@@ -137,6 +137,7 @@ class Border(pygame.sprite.Sprite):
 
 class Board:
     def __init__(self, wid, hei):
+        self.size = [wid, hei]
         self.board = [[0] * wid for _ in range(hei)]
 
     def add(self, cells):
@@ -153,10 +154,6 @@ class Board:
                 for i in range(line, 0, -1):
                     self.board[i] = self.board[i - 1]
                 print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
-        for i in range(len(self.board)):
-            print(end="\n")
-            for j in range(len(self.board[0])):
-                print(self.board[i][j], end=" ")
 
     def delete_line(self, line):
         line_spr = Line(line * 50 + 25 + height % 50)
@@ -339,7 +336,6 @@ while running:
                     active_menu = "replay"
                 elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490 and active_menu == "":
                     pass
-                    #active_menu = "help"
                     #rules()
                 elif 310 <= pos[0] <= 590 and 510 <= pos[1] <= 560 and active_menu == "":
                     active_menu = "exit"
