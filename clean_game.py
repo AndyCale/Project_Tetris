@@ -61,6 +61,7 @@ class Block(pygame.sprite.Sprite):
         color_key = (0, 0, 0, 255)
         self.image.set_colorkey(color_key)
         self.mask = pygame.mask.from_surface(self.image)
+        print(self.rect)
 
     def update(self):
         global flag
@@ -100,6 +101,7 @@ class Block(pygame.sprite.Sprite):
         while not pygame.sprite.collide_mask(self, down) and len([1 for i in all_blocks
                                                                   if pygame.sprite.collide_mask(self, i) != None]) == 1:
             self.rect[1] += 1
+        print(self.rect)
 
     def cut(self):
         w, h = self.image.get_size()
@@ -112,7 +114,7 @@ class Block(pygame.sprite.Sprite):
             r += 1
         while all([self.image.get_at((x, h - t - 1))[:3] == (0, 0, 0) for x in range(w)]) and t < h - 1:
             t += 1
-        #print(w, q, r, h, e, t)
+        print(w, q, r, h, e, t)
         '''for i in range(w):
             print("\n")
             for j in range(h):
@@ -123,7 +125,8 @@ class Block(pygame.sprite.Sprite):
             cropped = pygame.Surface((w - r - q, h - t - e))
             cropped.blit(self.image, (0, 0), (q, e, w - r - q, h - t - e))
             #screen.blit(cropped, (0, 0))
-            return cropped, (self.rect[0] + q, self.rect[1] + e, self.rect[2] - q - r, self.rect[3] - e - t)
+            #return cropped, (self.rect[0] + q, self.rect[1] + e, self.rect[2] - q - r, self.rect[3] - e - t)
+            return cropped, (self.rect[0] + q, self.rect[1] + e, w - r - q, h - t - e)
         else:
             print(22222222222222222222)
             print(self.rect)
@@ -164,14 +167,17 @@ class Board:
                     self.board[i] = self.board[i - 1]
                 print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
         for i in range(len(self.board)):
-            print("\n")
+            print(end="\n")
             for j in range(len(self.board[0])):
                 print(self.board[i][j], end=" ")
 
     def delete_line(self, line):
         line_spr = Line(line * 50 + 25 + height % 50)
+        print(line_spr.rect)
         for block in pygame.sprite.spritecollide(line_spr, all_blocks, False):
             if line_spr.rect[1] - block.rect[1] > 50 and block.rect[1] + block.rect[3] - line_spr.rect[1] > 50:
+                print(block.rect)
+                #print(line_spr.rect[1], block.rect[1], block.rect[1], block.rect[3], line_spr.rect[1])
                 print(1, block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50)
                 cropped_bl_1 = pygame.Surface((block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50))
                 cropped_bl_1.blit(block.image, (0, 0), (0, 0, block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50))
@@ -194,6 +200,9 @@ class Board:
                 all_blocks.remove(block)
             else:
                 all_blocks.remove(block)
+        for i in all_blocks:
+            if i != active:
+                i.run_down()
         lines.empty()
 
 
@@ -524,8 +533,7 @@ while running:
                 running = False
             else:
                 score += 15
-        if game:
-            for i in all_blocks:
+        for i in all_blocks:
                 if i != active:
                     i.run_down()
         '''cropped = pygame.Surface((200, 200))
