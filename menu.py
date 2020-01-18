@@ -134,7 +134,7 @@ def menu():
                 elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
                     print("Рекорды")
                 elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
-                    print("Об игре")
+                    rules()
                 elif 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
                     print(2)
                     ex = True
@@ -361,6 +361,67 @@ def game():
         pygame.display.flip()
 
 
+def rules():
+    size_rul = 720, 830
+    screen_rul = pygame.display.set_mode(size_rul)
+    screen_rul.fill((40, 40, 40))
+    running_rul = True
+
+    while running_rul:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running_rul = False
+
+        font = pygame.font.Font(None, 60)
+        for i in range(4):
+            text = font.render(["От автора программки", "Управление", "Правила", "История игры"][i], 1, (200, 255, 255))
+            text_x = size_rul[0] // 2 - text.get_width() // 2
+            text_y = 40 + 180 * i
+            screen.blit(text, (text_x, text_y))
+
+        for i in range(3):
+            font = pygame.font.Font(None, 30)
+            text = font.render(['При нажатие стрелочек "вправо" и "влево" блок двигается',
+                                'по горизонтали, при "вверх" и "вниз" - поворачивается,',
+                                'при нажатие на пробел падает до конца вниз'][i], 1, (230, 230, 230))
+            text_x = size_rul[0] // 2 - text.get_width() // 2
+            text_y = 280 + 30 * i
+            screen.blit(text, (text_x, text_y))
+
+        for i in range(3):
+            font = pygame.font.Font(None, 30)
+            text = font.render(['Правила такие же, как и в стандартном тетрисе - продержись',
+                                'как можно дольше, собирая блоки в полные горизонтальные',
+                                'полоски и освобождая тем самым место для новых'][i], 1, (230, 230, 230))
+            text_x = size_rul[0] // 2 - text.get_width() // 2
+            text_y = 460 + 30 * i
+            screen.blit(text, (text_x, text_y))
+
+        for i in range(3):
+            font = pygame.font.Font(None, 30)
+            text = font.render(['Меня зовут Быковская Александра и я сделала эту кривую',
+                                'версию тетриса для проекта в Яндекс.Лицей. Я старалась,',
+                                'поэтому очень надеюсь, что вам понравится. Приятной игры!'][i], 1, (230, 230, 230))
+            text_x = size_rul[0] // 2 - text.get_width() // 2
+            text_y = 100 + 30 * i
+            screen.blit(text, (text_x, text_y))
+
+        for i in range(5):
+            font = pygame.font.Font(None, 30)
+            text = font.render(['Тетрис впервые был изобретен советским программистом Алексеем',
+                                'Пажитновым и выпущен 6 июня 1984 года. Идею он взял с игры',
+                                '"Пентамино". Изначальная версия игры написана на Паскале для',
+                                'копмьютера Электроника-60, но комерческая была уже выпущена',
+                                'американской компанией Spectrum Holobyte'][i], 1, (230, 230, 230))
+            text_x = size_rul[0] // 2 - text.get_width() // 2
+            text_y = 640 + 30 * i
+            screen.blit(text, (text_x, text_y))
+
+        clock.tick(60)
+        pygame.display.flip()
+
+
 start_screen()
 menu()
+rules()
 pygame.quit()
