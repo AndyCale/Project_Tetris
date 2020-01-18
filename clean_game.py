@@ -246,12 +246,17 @@ time = perf_counter()
 time_pause = 0
 next_image = next_block()
 game = True
+loss = False
 active_menu = ""
 time_for_pause = []
+pos_loss = (-size[0], 0)
+pict_loss = load_image("gameover.jpg")
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and loss:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -301,7 +306,7 @@ while running:
                     while pygame.sprite.collide_mask(active, r) is not None:
                         active.rect[0] -= 50
 
-        if not game:
+        if not game and not loss:
             if active_menu == "":
                 pygame.draw.rect(screen, (100, 100, 100), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400))
                 pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 165, size[1] // 2 - 200, 330, 400), 1)
@@ -509,7 +514,9 @@ while running:
             next_image = next_block()
             flag = False
             if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
-                running = False
+                #running = False
+                game = False
+                loss = True
             else:
                 score += 15
         for i in all_blocks:
@@ -564,6 +571,12 @@ while running:
 
         next_min = pygame.transform.scale(next_image[0], (150, 150))
         screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
+    if loss:
+        if pos_loss[0] >= 0:
+            pos_loss = (0, 0)
+        else:
+            pos_loss = (pos_loss[0] + 5, 0)
+        screen.blit(pict_loss, pos_loss)
 
     clock.tick(fps)
     pygame.display.flip()
