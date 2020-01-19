@@ -258,8 +258,11 @@ def name(time_g, score_g):
     nickname = ""
     running_name = True
     shift = False
+    k = 0
 
     while running_name:
+        k += 1
+
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 running_name = False
@@ -269,10 +272,13 @@ def name(time_g, score_g):
                     running_name = False
                 elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
                     shift = True
-                elif ev.key == pygame.K_SPACE and len(nickname) < 20:
+                elif ev.key == pygame.K_SPACE and len(nickname) < 17:
                     nickname += " "
-                elif pygame.key.name(ev.key) in "qwertyuiopasdfghjklzxcvbnm_!1234567890/.," and len(nickname) < 20:
-                    nickname += pygame.key.name(ev.key).upper() if shift else pygame.key.name(ev.key)
+                elif pygame.key.name(ev.key) in "qwertyuiopasdfghjklzxcvbnm1234567890-" and len(nickname) < 17:
+                    if pygame.key.name(ev.key) == "-" and shift:
+                        nickname += "_"
+                    elif pygame.key.name(ev.key) != "-":
+                        nickname += pygame.key.name(ev.key).upper() if shift else pygame.key.name(ev.key)
                 elif ev.key == pygame.K_BACKSPACE:
                     nickname = nickname[:-1]
                 elif ev.key == pygame.K_RETURN:
@@ -281,22 +287,29 @@ def name(time_g, score_g):
                 if ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
                     shift = False
 
-        pygame.draw.rect(screen, (254, 252, 175), (size[0] // 2 - 200, size[1] // 2 - 130, 400, 260))
-        pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 200, size[1] // 2 - 130, 400, 260), 1)
+        pygame.draw.rect(screen, (189, 177, 140), (size[0] // 2 - 250, size[1] // 2 - 150, 500, 300))
+        pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 250, size[1] // 2 - 150, 500, 300), 1)
 
-        pygame.draw.rect(screen, (160, 160, 160), (size[0] // 2 - 150, size[1] // 2 + 70, 300, 40))
-        pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 150, size[1] // 2 + 70, 300, 40), 1)
+        pygame.draw.rect(screen, (171, 160, 125), (size[0] // 2 - 150, size[1] // 2 + 50, 300, 40))
+        pygame.draw.rect(screen, (0, 0, 0), (size[0] // 2 - 150, size[1] // 2 + 50, 300, 40), 1)
 
         f = pygame.font.Font(None, 40)
 
-        for i in range(4):
+        for i in range(5):
             t = f.render(["Ваш результат:", "Время: " + ":".join(time_g), "Очки: " + str(score),
-                          "Введите свой никнейм"][i], 1, (20, 20, 20))
+                          "Введите свой никнейм", nickname][i], 1, (20, 20, 20))
             t_x = size[0] // 2 - t.get_width() // 2
-            t_y = size[1] // 2 - 100 + i * 35 if i < 3 else size[1] // 2 + 30
+            t_y = size[1] // 2 - 130 + i * 40 if i < 3 else size[1] // 2 + 10 + (i - 3) * 46
             screen.blit(t, (t_x, t_y))
 
-        clock.tick(fps)
+        t = f.render("", 1, (20, 20, 20))
+        t_x = size[0] // 2 - t.get_width() // 2
+        t_y = size[1] // 2 - 130 + i * 40 if i < 3 else size[1] // 2 + 10 + (i - 3) * 46
+        screen.blit(t, (t_x, t_y))
+
+
+
+        clock.tick(60)
         pygame.display.flip()
     return nickname
 
