@@ -461,13 +461,13 @@ while running:
                     screen.blit(text, (text_x, text_y))
 
                     font = pygame.font.Font(None, 70)
-                    text = font.render("Далее:", 1, (0, 0, 0))
+                    text = font.render("Далее:", 1, (218, 241, 228))
                     text_x = width + (size[0] - width) // 2 - 85
                     text_y = 35
                     screen.blit(text, (text_x, text_y))
 
                     for i in range(3):
-                        text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (0, 0, 0))
+                        text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (218, 241, 228))
                         text_x = width + (size[0] - width) // 2 - 100
                         text_y = 300 + i * 150
                         screen.blit(text, (text_x, text_y))
@@ -568,7 +568,8 @@ while running:
             if active_menu == "replay":
                 font = pygame.font.Font(None, 50)
                 for i in range(3):
-                    text = font.render(("Вы уверены, что хотите", "перезапустить игру? Ваш", "прогресс будет потерян")[i], 1, (20, 20, 20))
+                    text = font.render(("Вы уверены, что хотите", "перезапустить игру? Ваш",
+                                        "прогресс будет потерян")[i], 1, (20, 20, 20))
                     text_x = size[0] // 2 - text.get_width() // 2
                     text_y = 300 + 40 * i
                     screen.blit(text, (text_x, text_y))
@@ -576,7 +577,8 @@ while running:
             if active_menu == "exit":
                 font = pygame.font.Font(None, 50)
                 for i in range(3):
-                    text = font.render(("Вы уверены, что хотите", "выйти из игры? Ваш", "прогресс будет потерян")[i], 1, (20, 20, 20))
+                    text = font.render(("Вы уверены, что хотите", "выйти из игры? Ваш", "прогресс будет потерян")[i],
+                                       1, (20, 20, 20))
                     text_x = size[0] // 2 - text.get_width() // 2
                     text_y = 300 + 40 * i
                     screen.blit(text, (text_x, text_y))
@@ -593,8 +595,8 @@ while running:
             else:
                 score += 15
         for i in all_blocks:
-                if i != active:
-                    i.run_down()
+            if i != active:
+                i.run_down()
         '''cropped = pygame.Surface((200, 200))
         cropped.blit(active.image, (0, 0), (0, 0, 150, int(str(active.image).split("(")[1].split("x")[1]) - 50))
         screen.blit(cropped, (0, 0))'''
@@ -632,12 +634,12 @@ while running:
         screen.blit(text, (text_x, text_y))
 
         font = pygame.font.Font(None, 70)
-        text = font.render("Далее:", 1, (0, 0, 0))
+        text = font.render("Далее:", 1, (218, 241, 228))
         text_x = width + (size[0] - width) // 2 - 85
         text_y = 35
         screen.blit(text, (text_x, text_y))
         for i in range(3):
-            text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (0, 0, 0))
+            text = font.render(["Время:", "Очки:", "Рекорд:"][i], 1, (218, 241, 228))
             text_x = width + (size[0] - width) // 2 - 100
             text_y = 300 + i * 150
             screen.blit(text, (text_x, text_y))

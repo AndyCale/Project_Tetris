@@ -433,7 +433,21 @@ def rules():
         pygame.display.flip()
 
 
+def records():
+    size_rul = 720, 830
+    screen_rul = pygame.display.set_mode(size_rul)
+    screen_rul.fill((40, 40, 40))
+    running_rec = True
+
+    while running_rec:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running_rec = False
+
+    clock.tick(60)
+    pygame.display.flip()
+
+
 start_screen()
 menu()
-rules()
 pygame.quit()
