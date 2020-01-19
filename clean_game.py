@@ -644,6 +644,10 @@ while running:
 
         next_min = pygame.transform.scale(next_image[0], (150, 150))
         screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
+        if int(time_for_pause[0]) >= 3:
+            speed = 3
+        elif int(time_for_pause[0]) >= 1:
+            speed = 2
     if loss:
         screen.blit(pict_loss, pos_loss)
         if pos_loss[0] >= 0:
