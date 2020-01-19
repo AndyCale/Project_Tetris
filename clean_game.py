@@ -3,6 +3,7 @@ import os
 from random import choice
 from PIL import Image
 from time import perf_counter
+import sqlite3
 
 
 pygame.init()
@@ -250,20 +251,68 @@ loss = False
 active_menu = ""
 time_for_pause = []
 pos_loss = (-size[0], 0)
-pict_loss = load_image("gameover.jpg")
+pict_loss = load_image("gameover.jpg", -1)
+
+
+def name(time_g, score_g):
+    nickname = ""
+    running_name = True
+    shift = False
+
+    while running_name:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                running_name = False
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_ESCAPE:
+                    nickname = None
+                    running_name = False
+                elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
+                    shift = True
+                elif ev.key == pygame.K_SPACE and len(nickname) < 20:
+                    nickname += " "
+                elif pygame.key.name(ev.key) in "qwertyuiopasdfghjklzxcvbnm_!1234567890/.," and len(nickname) < 20:
+                    nickname += pygame.key.name(ev.key).upper() if shift else pygame.key.name(ev.key)
+                elif ev.key == pygame.K_BACKSPACE:
+                    nickname = nickname[:-1]
+                elif ev.key == pygame.K_RETURN:
+                    running_name = False
+            elif ev.type == pygame.KEYUP:
+                if ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
+                    shift = False
+
+        pygame.draw.rect(screen, (254, 252, 175), (size[0] // 2 - 200, size[1] // 2 - 130, 400, 260))
+        pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 200, size[1] // 2 - 130, 400, 260), 1)
+
+        pygame.draw.rect(screen, (160, 160, 160), (size[0] // 2 - 150, size[1] // 2 + 70, 300, 40))
+        pygame.draw.rect(screen, (255, 255, 255), (size[0] // 2 - 150, size[1] // 2 + 70, 300, 40), 1)
+
+        f = pygame.font.Font(None, 40)
+
+        for i in range(4):
+            t = f.render(["Ваш результат:", "Время: " + ":".join(time_g), "Очки: " + str(score),
+                          "Введите свой никнейм"][i], 1, (20, 20, 20))
+            t_x = size[0] // 2 - t.get_width() // 2
+            t_y = size[1] // 2 - 100 + i * 35 if i < 3 else size[1] // 2 + 30
+            screen.blit(t, (t_x, t_y))
+
+        clock.tick(fps)
+        pygame.display.flip()
+    return nickname
+
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and loss:
-            running = False
+        if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN) and loss:
+            running = pos_loss = (0, 0)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 if game:
                     game = False
                     time_pause = perf_counter()
-                else:
+                elif not loss:
                     game = True
                     time += perf_counter() - time_pause
                     active_menu = ""
@@ -344,14 +393,13 @@ while running:
                     #rules()
                 elif 310 <= pos[0] <= 590 and 510 <= pos[1] <= 560 and active_menu == "":
                     active_menu = "exit"
-                elif 310 <= pos[0] <= 590 and 370 <= pos[1] <= 420 and active_menu in ["exit", "replay"]:
+                elif 310 <= pos[0] <= 410 and 450 <= pos[1] <= 500 and active_menu in ["exit", "replay"]:
                     if active_menu == "exit":
                         running = False
-                        # terminated()
                     else:
                         pass
                         # как-то перезапускать игру
-                elif 310 <= pos[0] <= 590 and 440 <= pos[1] <= 490 and active_menu in ["exit", "replay"]:
+                elif 490 <= pos[0] <= 590 and 450 <= pos[1] <= 500 and active_menu in ["exit", "replay"]:
                     active_menu = ""
 
                     screen.fill((0, 0, 0))
@@ -514,7 +562,6 @@ while running:
             next_image = next_block()
             flag = False
             if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
-                #running = False
                 game = False
                 loss = True
             else:
@@ -572,12 +619,13 @@ while running:
         next_min = pygame.transform.scale(next_image[0], (150, 150))
         screen.blit(next_min, (width + (size[0] - width) // 2 - 80 + 5, 105))
     if loss:
+        screen.blit(pict_loss, pos_loss)
         if pos_loss[0] >= 0:
             pos_loss = (0, 0)
+            print(name(time_for_pause, score))
+            running = False
         else:
             pos_loss = (pos_loss[0] + 5, 0)
-        screen.blit(pict_loss, pos_loss)
-
     clock.tick(fps)
     pygame.display.flip()
 pygame.quit()

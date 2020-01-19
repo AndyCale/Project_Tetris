@@ -218,7 +218,6 @@ def menu():
                                     color[3][1] if color[3][1] <= 255 else 255,
                                     color[3][2] if color[3][2] <= 255 else 255))
 
-
         pygame.display.flip()
         clock.tick(fps)
 
