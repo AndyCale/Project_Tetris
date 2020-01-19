@@ -8,6 +8,7 @@ import sqlite3
 pygame.init()
 size = width, height = 550, 550
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption('TeTris')
 
 fps = 50
 clock = pygame.time.Clock()
@@ -73,7 +74,6 @@ def menu():
     global screen, size, width, height
 
     screen.fill((0, 0, 0))
-
     color_let = []
     for let in range(len("TeTris")):
         font = pygame.font.Font(None, 90)
@@ -437,7 +437,6 @@ def records():
     size_rul = 720, 830
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
-    pygame.display.set_caption('Рекорды')
 
     running_rec = True
     con = sqlite3.connect("records.db")
@@ -472,13 +471,30 @@ def records():
         text_y = 30
         screen.blit(text, (text_x, text_y))
 
-        for i in range(number):
-            font = pygame.font.Font(None, 30)
-            text = font.render(str(i + 1) + " ".join([str(j) for j in result[i][1:]]), 1, (230, 230, 230))
-            text_x = 30
-            text_y = 100 + i * 35
-            screen.blit(text, (text_x, text_y))
+        pygame.draw.rect(screen, (231, 209, 187), (width + (size[0] - width) // 2 - 110, 20, 220, 50))
+        pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 20, 220, 50), 1)
 
+        font = pygame.font.Font(None, 30)
+        for i in range(number):
+            for j in range(4):
+                t = str(result[i][j])
+                if j == 2:
+                    t = int(float(t))
+                    mint = str(t // 60).rjust(2, "0")
+                    sec = str(t % 60).rjust(2, "0")
+                    mil = str(t * 100 % 100).rjust(2, "0")
+                    t = mint + ":" + sec + ":" + mil
+                text = font.render(str(i + 1) if j == 0 else t, 1, (230, 230, 230))
+                if j == 0:
+                    text_x = 20
+                if j == 1:
+                    text_x = 50
+                if j == 2:
+                    text_x = 300
+                if j == 3:
+                    text_x = 600
+                text_y = 100 + i * 35
+                screen.blit(text, (text_x, text_y))
 
         clock.tick(60)
         pygame.display.flip()
@@ -487,6 +503,6 @@ def records():
 
 
 #start_screen()
-menu()
+#menu()
 records()
 pygame.quit()

@@ -10,7 +10,6 @@ pygame.init()
 size = (900, 800)
 width, height = 615, 800
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption('TeTris')
 
 fps = 50
 clock = pygame.time.Clock()
