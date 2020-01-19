@@ -434,7 +434,7 @@ def rules():
 
 
 def records():
-    size_rul = 720, 830
+    size_rul = 720, 870
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
 
@@ -444,18 +444,14 @@ def records():
     result = cur.execute("SELECT * FROM records").fetchall()
     sorting = "time"
     result = sorted(result, key=lambda x: x[2])[::-1]
-    '''if sorting == "time":
-        result = sorted(result, key=lambda x: x[2])[::-1]
-    else:
-        result = sorted(result, key=lambda x: x[3])[::-1]
-    print(result)'''
 
     while running_rec:
         screen_rul.fill((40, 40, 40))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running_rec = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and width + (size[0] - width) // 2 -\
+                    110 <= event.pos[0] <= width + (size[0] - width) // 2 + 110 and 20 <= event.pos[1] <= 70:
                 if sorting == "time":
                     sorting = "score"
                     result = sorted(result, key=lambda x: x[3])[::-1]
@@ -474,6 +470,11 @@ def records():
         pygame.draw.rect(screen, (231, 209, 187), (width + (size[0] - width) // 2 - 110, 20, 220, 50))
         pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 20, 220, 50), 1)
 
+        text = font.render("Времени" if sorting == "time" else "Очкам", 1, (30, 30, 30))
+        text_x = 550 - text.get_width() // 2
+        text_y = 35
+        screen.blit(text, (text_x, text_y))
+
         font = pygame.font.Font(None, 30)
         for i in range(number):
             for j in range(4):
@@ -488,13 +489,27 @@ def records():
                 if j == 0:
                     text_x = 20
                 if j == 1:
-                    text_x = 50
+                    text_x = 70
                 if j == 2:
-                    text_x = 300
+                    text_x = 360
                 if j == 3:
-                    text_x = 600
-                text_y = 100 + i * 35
+                    text_x = 550
+                text_y = 155 + i * 35
                 screen.blit(text, (text_x, text_y))
+
+        font = pygame.font.Font(None, 40)
+        for j in range(3):
+            text = font.render(["Никнейм", "Время", "Очки"][j], 1, (230, 230, 230))
+            if j == 0:
+                text_x = 70
+            if j == 1:
+                text_x = 360
+            if j == 2:
+                text_x = 550
+            text_y = 100
+            screen.blit(text, (text_x, text_y))
+            pygame.draw.line(screen, (255, 255, 255), (text_x - 10, 105), (text_x - 10, 840), 1)
+        pygame.draw.line(screen, (255, 255, 255), (17, 135), (700, 135), 1)
 
         clock.tick(60)
         pygame.display.flip()
@@ -502,7 +517,6 @@ def records():
     con.close()
 
 
-#start_screen()
-#menu()
-records()
+start_screen()
+menu()
 pygame.quit()
