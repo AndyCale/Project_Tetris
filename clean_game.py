@@ -648,7 +648,16 @@ while running:
         screen.blit(pict_loss, pos_loss)
         if pos_loss[0] >= 0:
             pos_loss = (0, 0)
-            print(name(time_for_pause, score))
+            nick_name = name(time_for_pause, score)
+            if nick_name is not None:
+                con = sqlite3.connect("records.db")
+                cur = con.cursor()
+                cur.execute("INSERT INTO Records(Nickname, Time, Score) VALUES('{}', {},"
+                            " {})".format(nick_name, perf_counter() - time, score))
+
+                con.commit()
+                con.close()
+
             running = False
         else:
             pos_loss = (pos_loss[0] + 5, 0)
