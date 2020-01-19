@@ -2,6 +2,7 @@ import pygame
 import os
 import sys
 from random import choice
+import sqlite3
 
 
 pygame.init()
@@ -438,16 +439,43 @@ def records():
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
     running_rec = True
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
+    result = cur.execute("SELECT * FROM records").fetchall()
+    sorting = "time"
+    if sorting == "time":
+        result = sorted(result, key=lambda x: x[2])[::-1]
+    else:
+        result = sorted(result, key=lambda x: x[3])[::-1]
+    print(result)
 
     while running_rec:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running_rec = False
+        sorting = "time"
+        if sorting == "time":
+            result = sorted(result, key=lambda x: x[2])[::-1]
+        else:
+            result = sorted(result, key=lambda x: x[3])[::-1]
 
-    clock.tick(60)
-    pygame.display.flip()
+        #for i in range
+
+        for i in range(len(result)):
+            font = pygame.font.Font(None, 60)
+            text = font.render("Далее:", 1, (218, 241, 228))
+            text_x = width + (size[0] - width) // 2 - 85
+            text_y = 35
+            screen.blit(text, (text_x, text_y))
 
 
-start_screen()
-menu()
+        clock.tick(60)
+        pygame.display.flip()
+    con.commit()
+    con.close()
+
+
+#start_screen()
+#menu()
+records()
 pygame.quit()

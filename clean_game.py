@@ -328,6 +328,18 @@ def name(time_g, score_g):
 
 
 while running:
+    if game:
+        screen.fill((0, 0, 0))
+        if flag:
+            active = Block(None, None, next_image)
+            next_image = next_block()
+            flag = False
+            if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
+                game = False
+                loss = True
+            else:
+                score += 15
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -584,7 +596,7 @@ while running:
                     screen.blit(text, (text_x, text_y))
 
     if game:
-        screen.fill((0, 0, 0))
+        '''screen.fill((0, 0, 0))
         if flag:
             active = Block(None, None, next_image)
             next_image = next_block()
@@ -593,7 +605,7 @@ while running:
                 game = False
                 loss = True
             else:
-                score += 15
+                score += 15'''
         for i in all_blocks:
             if i != active:
                 i.run_down()
