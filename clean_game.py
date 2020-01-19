@@ -295,19 +295,32 @@ def name(time_g, score_g):
 
         f = pygame.font.Font(None, 40)
 
-        for i in range(5):
+        for g in range(5):
             t = f.render(["Ваш результат:", "Время: " + ":".join(time_g), "Очки: " + str(score),
-                          "Введите свой никнейм", nickname][i], 1, (20, 20, 20))
+                          "Введите свой никнейм", nickname][g], 1, (20, 20, 20))
             t_x = size[0] // 2 - t.get_width() // 2
-            t_y = size[1] // 2 - 130 + i * 40 if i < 3 else size[1] // 2 + 10 + (i - 3) * 46
+            t_y = size[1] // 2 - 130 + g * 40 if g < 3 else size[1] // 2 + 10 + (g - 3) * 46
             screen.blit(t, (t_x, t_y))
 
-        t = f.render("", 1, (20, 20, 20))
-        t_x = size[0] // 2 - t.get_width() // 2
-        t_y = size[1] // 2 - 130 + i * 40 if i < 3 else size[1] // 2 + 10 + (i - 3) * 46
-        screen.blit(t, (t_x, t_y))
+        if k % 50 <= 25:
+            nick = f.render(nickname, 1, (20, 20, 20))
+            t = f.render("|", 1, (20, 20, 20))
+            t_x = size[0] // 2 + nick.get_width() // 2 + 1
+            t_y = size[1] // 2 + 56
+            screen.blit(t, (t_x, t_y))
 
-
+        if k % 40 <= 20:
+            f = pygame.font.Font(None, 33)
+            t = f.render("Нажмите Enter для продолжения", 1, (20, 20, 20))
+            t_x = size[0] // 2 - t.get_width() // 2
+            t_y = 512
+            screen.blit(t, (t_x, t_y))
+        else:
+            f = pygame.font.Font(None, 31)
+            t = f.render("Нажмите Enter для продолжения", 1, (20, 20, 20))
+            t_x = size[0] // 2 - t.get_width() // 2
+            t_y = 512
+            screen.blit(t, (t_x, t_y))
 
         clock.tick(60)
         pygame.display.flip()
