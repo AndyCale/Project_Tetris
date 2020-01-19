@@ -121,11 +121,10 @@ def menu():
                 elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
                     game()
                 elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
-                    print("Рекорды")
+                    records()
                 elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
                     rules()
                 elif 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
-                    print(2)
                     ex = True
 
                 size = width, height = 550, 550
@@ -438,34 +437,46 @@ def records():
     size_rul = 720, 830
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
+    pygame.display.set_caption('Рекорды')
+
     running_rec = True
     con = sqlite3.connect("records.db")
     cur = con.cursor()
     result = cur.execute("SELECT * FROM records").fetchall()
     sorting = "time"
-    if sorting == "time":
+    result = sorted(result, key=lambda x: x[2])[::-1]
+    '''if sorting == "time":
         result = sorted(result, key=lambda x: x[2])[::-1]
     else:
         result = sorted(result, key=lambda x: x[3])[::-1]
-    print(result)
+    print(result)'''
 
     while running_rec:
+        screen_rul.fill((40, 40, 40))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running_rec = False
-        sorting = "time"
-        if sorting == "time":
-            result = sorted(result, key=lambda x: x[2])[::-1]
-        else:
-            result = sorted(result, key=lambda x: x[3])[::-1]
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if sorting == "time":
+                    sorting = "score"
+                    result = sorted(result, key=lambda x: x[3])[::-1]
+                else:
+                    sorting = "time"
+                    result = sorted(result, key=lambda x: x[2])[::-1]
 
-        #for i in range
+        number = 20 if len(result) > 20 else len(result)
 
-        for i in range(len(result)):
-            font = pygame.font.Font(None, 60)
-            text = font.render("Далее:", 1, (218, 241, 228))
-            text_x = width + (size[0] - width) // 2 - 85
-            text_y = 35
+        font = pygame.font.Font(None, 40)
+        text = font.render("Сортировать по:", 1, (230, 230, 230))
+        text_x = 30
+        text_y = 30
+        screen.blit(text, (text_x, text_y))
+
+        for i in range(number):
+            font = pygame.font.Font(None, 30)
+            text = font.render(str(i + 1) + " ".join([str(j) for j in result[i][1:]]), 1, (230, 230, 230))
+            text_x = 30
+            text_y = 100 + i * 35
             screen.blit(text, (text_x, text_y))
 
 
@@ -476,6 +487,6 @@ def records():
 
 
 #start_screen()
-#menu()
+menu()
 records()
 pygame.quit()
