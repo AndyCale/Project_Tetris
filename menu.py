@@ -1096,6 +1096,7 @@ def game_run():
 
 
 def rules():
+    """правила"""
     size_rul = 720, 830
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
@@ -1156,6 +1157,7 @@ def rules():
 
 
 def records():
+    """рекорды"""
     size_rul = 720, 930
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
@@ -1175,6 +1177,7 @@ def records():
                 running_rec = False
             if event.type == pygame.MOUSEBUTTONDOWN and width + (size[0] - width) // 2 -\
                     110 <= event.pos[0] <= width + (size[0] - width) // 2 + 110 and 20 <= event.pos[1] <= 70:
+                """игрок может выбрать, как сортировать рекорды"""
                 if sorting == "time":
                     sorting = "score"
                     result = sorted(result, key=lambda x: x[3])[::-1]
@@ -1201,6 +1204,7 @@ def records():
                 clear = False
 
         number = 20 if len(result) > 20 else len(result)
+        """показывается 20 лучших рекордов"""
 
         font = pygame.font.Font(None, 40)
         text = font.render("Сортировать по:", 1, (230, 230, 230))
@@ -1271,6 +1275,7 @@ def records():
 
             font = pygame.font.Font(None, 40)
             for p in range(2):
+                """стирание рекордов"""
                 text = font.render(["Вы уверены, что хотите", "стереть все рекорды?"][p], 1, (30, 30, 30))
                 text_x = size_rul[0] // 2 - text.get_width() // 2
                 text_y = size_rul[1] // 2 - 80 + p * 40
