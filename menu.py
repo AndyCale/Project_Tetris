@@ -1082,9 +1082,10 @@ def records():
                 cur = con.cursor()
 
                 cur.execute("DELETE from Records")
+                result = cur.execute("SELECT * FROM records").fetchall()
 
-                con.commit()
-                con.close()
+                clear = False
+
             elif clear and event.type == pygame.MOUSEBUTTONDOWN and size_rul[0] //\
                     2 + 25 <= event.pos[0] <= size_rul[0] // 2 + 115 and size_rul[1] //\
                     2 + 27 <= event.pos[1] <= size_rul[1] // 2 + 77:
