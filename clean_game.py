@@ -126,17 +126,17 @@ class Board:
             if all(self.board[line]):
                 score += 100
                 self.delete_line(line)
-                print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
+                print("\n".join([" ".join(list(map(str, o))) for o in self.board]))
                 print(1)
                 board.board = [[0] * board.size[0] for _ in range(board.size[1])]
                 for block in all_blocks:
                     cells = []
-                    for i in pygame.sprite.spritecollide(block, points, False):
-                        if pygame.sprite.collide_mask(block, i):
-                            cells.append(pnt[i])
+                    for o in pygame.sprite.spritecollide(block, points, False):
+                        if pygame.sprite.collide_mask(block, o):
+                            cells.append(pnt[o])
                     for cell in cells:
                         board.board[cell[0]][cell[1]] = 1
-                print("\n".join([" ".join(list(map(str, i))) for i in self.board]))
+                print("\n".join([" ".join(list(map(str, o))) for o in self.board]))
 
     def delete_line(self, line):
         line_spr = Line(line * 50 + 25 + height % 50)
