@@ -666,6 +666,19 @@ def game_run():
                             else:
                                 mint, sec, mil = "00", "00", "00"
 
+                            result = cur.execute("SELECT * FROM records").fetchall()
+                            if len(result) > 0:
+                                result = int(float(sorted(result, key=lambda x: x[2])[-1][2]))
+                                mint_rec = str(result // 60).rjust(2, "0")
+                                sec_rec = str(result % 60).rjust(2, "0")
+                                mil_rec = str(result * 100 % 100).rjust(2, "0")
+                            else:
+                                mint_rec = "00"
+                                sec_rec = "00"
+                                mil_rec = "00"
+
+                            records_for_pause = [mint_rec, sec_rec, mil_rec]
+
                             text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
                             text_x = 715
                             text_y = 370
@@ -673,6 +686,10 @@ def game_run():
                             text = font.render(str(score), 1, (255, 255, 255))
                             text_x = 854 - text.get_width()
                             text_y = 520
+                            screen.blit(text, (text_x, text_y))
+                            text = font.render(":".join(records_for_pause), 1, (255, 255, 255))
+                            text_x = 854 - text.get_width()
+                            text_y = 670
                             screen.blit(text, (text_x, text_y))
 
                             font = pygame.font.Font(None, 70)
@@ -758,6 +775,19 @@ def game_run():
                             else:
                                 mint, sec, mil = "00", "00", "00"
 
+                            result = cur.execute("SELECT * FROM records").fetchall()
+                            if len(result) > 0:
+                                result = int(float(sorted(result, key=lambda x: x[2])[-1][2]))
+                                mint_rec = str(result // 60).rjust(2, "0")
+                                sec_rec = str(result % 60).rjust(2, "0")
+                                mil_rec = str(result * 100 % 100).rjust(2, "0")
+                            else:
+                                mint_rec = "00"
+                                sec_rec = "00"
+                                mil_rec = "00"
+
+                            records_for_pause = [mint_rec, sec_rec, mil_rec]
+
                             text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
                             text_x = 715
                             text_y = 370
@@ -765,6 +795,10 @@ def game_run():
                             text = font.render(str(score), 1, (255, 255, 255))
                             text_x = 854 - text.get_width()
                             text_y = 520
+                            screen.blit(text, (text_x, text_y))
+                            text = font.render(":".join(records_for_pause), 1, (255, 255, 255))
+                            text_x = 854 - text.get_width()
+                            text_y = 670
                             screen.blit(text, (text_x, text_y))
 
                             font = pygame.font.Font(None, 70)
@@ -939,7 +973,7 @@ def game_run():
 
             result = cur.execute("SELECT * FROM records").fetchall()
             if len(result) > 0:
-                result = int(float(sorted(result, key=lambda x: x[2])[0][2]))
+                result = int(float(sorted(result, key=lambda x: x[2])[-1][2]))
                 mint_rec = str(result // 60).rjust(2, "0")
                 sec_rec = str(result % 60).rjust(2, "0")
                 mil_rec = str(result * 100 % 100).rjust(2, "0")
