@@ -165,69 +165,71 @@ def menu():
             elif pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
 
-            if True:
-                if ex:
-                    pygame.draw.rect(screen, (50, 50, 50),
-                                     (width // 2 - 155, height // 2 - 75, 310, 150))
-                    pygame.draw.rect(screen, (255, 255, 255), (width // 2 - 155, height // 2 - 75, 310, 150), 1)
-                    font = pygame.font.Font(None, 26)
-                    text = font.render("Вы уверены, что хотите выйти?", 1, (200, 200, 200))
-                    text_x = width // 2 - text.get_width() // 2
-                    text_y = height // 2 - text.get_height() // 2 - 30
-                    screen.blit(text, (text_x, text_y))
-                    if 200 <= pos[0] <= 250 and 290 <= pos[1] <= 320:
-                        for i in range(2):
-                            font = pygame.font.Font(None, 26)
-                            text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
-                            pygame.draw.rect(screen, (210, 210, 210) if i == 0 else (170, 170, 170),
-                                             (200 + 100 * i, 290, 50, 30))
-                            pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
-                            screen.blit(text, (200 + 100 * i + 10, 290 + 5))
-                    elif 300 <= pos[0] <= 350 and 290 <= pos[1] <= 320:
-                        for i in range(2):
-                            font = pygame.font.Font(None, 26)
-                            text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
-                            pygame.draw.rect(screen, (210, 210, 210) if i == 1 else (170, 170, 170),
-                                             (200 + 100 * i, 290, 50, 30))
-                            pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
-                            screen.blit(text, (200 + 100 * i + 10, 290 + 5))
-                    else:
-                        for i in range(2):
-                            font = pygame.font.Font(None, 26)
-                            text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
-                            pygame.draw.rect(screen, (170, 170, 170), (200 + 100 * i, 290, 50, 30))
-                            pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
-                            screen.blit(text, (200 + 100 * i + 10, 290 + 5))
-
-                elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
-                    draw_button(0, (color[0][0] + 40 if color[0][0] + 40 <= 255 else 255,
-                                    color[0][1] + 40 if color[0][1] + 40 <= 255 else 255,
-                                    color[0][2] + 40 if color[0][2] + 40 <= 255 else 255))
-                elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
-                    draw_button(1, (color[1][0] + 40 if color[1][0] + 40 <= 255 else 255,
-                                    color[1][1] + 40 if color[1][1] + 40 <= 255 else 255,
-                                    color[1][2] + 40 if color[1][2] + 40 <= 255 else 255))
-                elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
-                    draw_button(2, (color[2][0] + 40 if color[2][0] + 40 <= 255 else 255,
-                                    color[2][1] + 40 if color[2][1] + 40 <= 255 else 255,
-                                    color[2][2] + 40 if color[2][2] + 40 <= 255 else 255))
-                elif 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
-                    draw_button(3, (color[3][0] + 40 if color[3][0] + 40 <= 255 else 255,
-                                    color[3][1] + 40 if color[3][1] + 40 <= 255 else 255,
-                                    color[3][2] + 40 if color[3][2] + 40 <= 255 else 255))
+            if ex:
+                """если мы нажали, что хотим выйти, переда нами появляется уточнение, точно ли мы этого хотим,
+                кнопочки становятся неного светлее, если навести на них мышкой"""
+                pygame.draw.rect(screen, (50, 50, 50),
+                                 (width // 2 - 155, height // 2 - 75, 310, 150))
+                pygame.draw.rect(screen, (255, 255, 255), (width // 2 - 155, height // 2 - 75, 310, 150), 1)
+                font = pygame.font.Font(None, 26)
+                text = font.render("Вы уверены, что хотите выйти?", 1, (200, 200, 200))
+                text_x = width // 2 - text.get_width() // 2
+                text_y = height // 2 - text.get_height() // 2 - 30
+                screen.blit(text, (text_x, text_y))
+                if 200 <= pos[0] <= 250 and 290 <= pos[1] <= 320:
+                    for i in range(2):
+                        font = pygame.font.Font(None, 26)
+                        text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
+                        pygame.draw.rect(screen, (210, 210, 210) if i == 0 else (170, 170, 170),
+                                         (200 + 100 * i, 290, 50, 30))
+                        pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
+                        screen.blit(text, (200 + 100 * i + 10, 290 + 5))
+                elif 300 <= pos[0] <= 350 and 290 <= pos[1] <= 320:
+                    for i in range(2):
+                        font = pygame.font.Font(None, 26)
+                        text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
+                        pygame.draw.rect(screen, (210, 210, 210) if i == 1 else (170, 170, 170),
+                                         (200 + 100 * i, 290, 50, 30))
+                        pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
+                        screen.blit(text, (200 + 100 * i + 10, 290 + 5))
                 else:
-                    draw_button(0, (color[0][0] if color[0][0] <= 255 else 255,
-                                    color[0][1] if color[0][1] <= 255 else 255,
-                                    color[0][2] if color[0][2] <= 255 else 255))
-                    draw_button(1, (color[1][0] if color[1][0] <= 255 else 255,
-                                    color[1][1] if color[1][1] <= 255 else 255,
-                                    color[1][2] if color[1][2] <= 255 else 255))
-                    draw_button(2, (color[2][0] if color[2][0] <= 255 else 255,
-                                    color[2][1] if color[2][1] <= 255 else 255,
-                                    color[2][2] if color[2][2] <= 255 else 255))
-                    draw_button(3, (color[3][0] if color[3][0] <= 255 else 255,
-                                    color[3][1] if color[3][1] <= 255 else 255,
-                                    color[3][2] if color[3][2] <= 255 else 255))
+                    for i in range(2):
+                        font = pygame.font.Font(None, 26)
+                        text = font.render(["Да", "Нет"][i], 1, (0, 0, 0))
+                        pygame.draw.rect(screen, (170, 170, 170), (200 + 100 * i, 290, 50, 30))
+                        pygame.draw.rect(screen, (0, 0, 0), (200 + 100 * i, 290, 50, 30), 1)
+                        screen.blit(text, (200 + 100 * i + 10, 290 + 5))
+
+                """кнопочки должны становится светлее, если навести на них мышку"""
+            elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
+                draw_button(0, (color[0][0] + 40 if color[0][0] + 40 <= 255 else 255,
+                                color[0][1] + 40 if color[0][1] + 40 <= 255 else 255,
+                                color[0][2] + 40 if color[0][2] + 40 <= 255 else 255))
+            elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
+                draw_button(1, (color[1][0] + 40 if color[1][0] + 40 <= 255 else 255,
+                                color[1][1] + 40 if color[1][1] + 40 <= 255 else 255,
+                                color[1][2] + 40 if color[1][2] + 40 <= 255 else 255))
+            elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
+                draw_button(2, (color[2][0] + 40 if color[2][0] + 40 <= 255 else 255,
+                                color[2][1] + 40 if color[2][1] + 40 <= 255 else 255,
+                                color[2][2] + 40 if color[2][2] + 40 <= 255 else 255))
+            elif 180 <= pos[0] <= 370 and 380 <= pos[1] <= 428:
+                draw_button(3, (color[3][0] + 40 if color[3][0] + 40 <= 255 else 255,
+                                color[3][1] + 40 if color[3][1] + 40 <= 255 else 255,
+                                color[3][2] + 40 if color[3][2] + 40 <= 255 else 255))
+            else:
+                draw_button(0, (color[0][0] if color[0][0] <= 255 else 255,
+                                color[0][1] if color[0][1] <= 255 else 255,
+                                color[0][2] if color[0][2] <= 255 else 255))
+                draw_button(1, (color[1][0] if color[1][0] <= 255 else 255,
+                                color[1][1] if color[1][1] <= 255 else 255,
+                                color[1][2] if color[1][2] <= 255 else 255))
+                draw_button(2, (color[2][0] if color[2][0] <= 255 else 255,
+                                color[2][1] if color[2][1] <= 255 else 255,
+                                color[2][2] if color[2][2] <= 255 else 255))
+                draw_button(3, (color[3][0] if color[3][0] <= 255 else 255,
+                                color[3][1] if color[3][1] <= 255 else 255,
+                                color[3][2] if color[3][2] <= 255 else 255))
 
         pygame.display.flip()
         clock.tick(fps)
@@ -235,6 +237,7 @@ def menu():
 
 def game_run():
     global size, width, height, screen
+    """сама игра"""
 
     size = (900, 800)
     width, height = 615, 800
@@ -243,6 +246,7 @@ def game_run():
     running = True
 
     def load_image_game(name_img, color_key=None):
+        """загрузка картинок, но с другими параметрами, не как в основной программе"""
         fullname = os.path.join('data', name_img)
         pict = pygame.image.load(fullname).convert()
         if color_key is None:
@@ -253,6 +257,7 @@ def game_run():
         return pict
 
     def color_block(block, color):
+        """покраска блока в случайно выбранный цвет - изначально они белые"""
         w, h = block.get_size()
         for x in range(w):
             for y in range(h):
@@ -260,6 +265,7 @@ def game_run():
                     block.set_at((x, y), color)
 
     def next_block():
+        """создает следующий блок, чтобы рисовать его в окошке "следующий блок"""
         img = load_image_game(choice(["block_l.png", "block_s.png", "block_t.png", "block_o.png", "block_i.png"]))
         color = pygame.Color(choice(["red", "blue", "orange", "yellow", "green", "pink", "purple"]))
         if choice([0, 1]):
@@ -269,8 +275,11 @@ def game_run():
         return img, rect
 
     class Block(pygame.sprite.Sprite):
+        """класс для реализации блоков"""
         def __init__(self, img=None, rect=None, nxt=None):
             super().__init__(all_blocks)
+            """создание блока - либо по параметрам, переданным из "следующего блока", либо после обрезки блока в 
+            резултате сбора полной горизонтальной линии"""
             if img is None:
                 self.image, self.rect = nxt[0], nxt[1]
             else:
@@ -286,18 +295,22 @@ def game_run():
                 all_blocks.remove(self)
 
         def update(self):
+            """обновление местоположения блока - падает, пока может"""
             if not pygame.sprite.collide_mask(self, down) and \
                     (not any([pygame.sprite.collide_mask(self, o) not in ((0, 0), None) for o in all_blocks]) or
                      len([1 for o in all_blocks if pygame.sprite.collide_mask(self, o) is not None]) == 1):
                 self.rect[1] += speed
             else:
+                """если падать некуда, он передает "эстафету" следующему - параметр True"""
                 cells = []
                 for o in pygame.sprite.spritecollide(self, points, False):
                     if pygame.sprite.collide_mask(self, o):
                         cells.append(pnt[o])
+                        """новый упавший блок вписываем на доску"""
                 return True, board.add(cells)
 
         def run(self, s):
+            """блок передвигается вправо или влево, пока это возможно, если так нажал игрок"""
             if s == "l":
                 if s == "l" and not pygame.sprite.collide_mask(self, left) and \
                         (not any([pygame.sprite.collide_mask(self, o) not in ((0, 0), None) for o in all_blocks]) or
@@ -316,6 +329,7 @@ def game_run():
                     self.rect[0] -= 50
 
         def run_down(self):
+            """блок пададает до конца вниз, пока это возможно"""
             while not pygame.sprite.collide_mask(self, down) and \
                     (len([1 for o in all_blocks if
                           pygame.sprite.collide_mask(self, o) is not None and self.rect[1] + self.rect[3] < o.rect[1] +
@@ -323,6 +337,7 @@ def game_run():
                 self.rect[1] += 1
 
         def cut(self):
+            """обрезание картинки от фона, чтобы при обрезки блока не было пустых частей"""
             w, h = self.image.get_size()
             q, e, u, t = 0, 0, 0, 0
             while all([self.image.get_at((q, y))[:3] == (0, 0, 0) for y in range(h)]) and q < w - 1:
@@ -338,19 +353,25 @@ def game_run():
             return cropped, (self.rect[0] + q, self.rect[1] + e, w - u - q, h - t - e)
 
     class Board:
+        """класс поля(доски игровой) - наличие блока помечаем 1, отсутсвие - 0"""
         def __init__(self, wid, hei):
             self.size = [wid, hei]
             self.board = [[0] * wid for _ in range(hei)]
 
         def add(self, cells):
+            """функция добавления блока"""
             num = 0
             for cell in cells:
                 self.board[cell[0]][cell[1]] = 1
             for line in range(len(self.board)):
+                """проверяем, не собралась ли горизонтальная полоса"""
                 if all(self.board[line]):
                     num += 1
+                    """количество собранный полос для начисления очков"""
                     self.delete_line(line)
+                    """обрезаем блоки - удаляем собранную линию"""
                     board.board = [[0] * board.size[0] for _ in range(board.size[1])]
+                    """перезаполняем доску - записываем, где теперь находятся блоки"""
                     for block in all_blocks:
                         cells = []
                         for o in pygame.sprite.spritecollide(block, points, False):
@@ -361,6 +382,8 @@ def game_run():
             return num * 100
 
         def delete_line(self, line):
+            """функция обрезания блоков, создаем линию на месте собранной полосы, все блоки, пересекающиеся с ней
+             должны быть удалены или обрезаны"""
             line_spr = Line(line * 50 + 25 + height % 50)
             for block in pygame.sprite.spritecollide(line_spr, all_blocks, False):
                 if line_spr.rect[1] - block.rect[1] > 50 and block.rect[1] + block.rect[3] - line_spr.rect[1] > 50:
@@ -398,9 +421,11 @@ def game_run():
             for block in all_blocks:
                 if block != active:
                     block.run_down()
+                """все новые блоки опускаем по возможности вниз, удаляем линию"""
             lines.empty()
 
     class Border(pygame.sprite.Sprite):
+        """границы, за которые не может выезать блок"""
         def __init__(self, group, im):
             super().__init__(group)
             self.image = load_image_game(im, -1)
@@ -414,6 +439,7 @@ def game_run():
             self.add(all_sprites)
 
     class Point(pygame.sprite.Sprite):
+        """для записывания наличия блока в той или иной клетке поля, и для удобства игрока"""
         def __init__(self, x, y, group):
             super().__init__(group)
             self.image = pygame.Surface((2, 2), pygame.SRCALPHA, 32)
@@ -421,63 +447,14 @@ def game_run():
             self.rect = pygame.Rect(x, y, 2, 2)
 
     class Line(pygame.sprite.Sprite):
+        """класс линии, с помощью которой удаляем собранную полосу"""
         def __init__(self, line):
             super().__init__(lines)
             self.image = pygame.Surface([width, 1])
             self.rect = pygame.Rect(0, line, width, 1)
 
-    image = Image.new("RGB", (width, 5), (0, 0, 0))
-    pix = image.load()
-    for i in range(width):
-        for j in range(5):
-            pix[i, j] = (0, 0, 0)
-    image.save("data//horiz.png")
-    image = Image.new("RGB", (1, height), (0, 0, 0))
-    pix = image.load()
-    for j in range(height):
-        pix[0, j] = (0, 0, 0)
-    image.save("data//vert.png")
-
-    all_sprites = pygame.sprite.Group()
-    all_blocks = pygame.sprite.Group()
-    vert_bord_l = pygame.sprite.Group()
-    vert_bord_r = pygame.sprite.Group()
-    horiz_bord = pygame.sprite.Group()
-    board = Board(width // 50, height // 50)
-    points = pygame.sprite.Group()
-    lines = pygame.sprite.Group()
-    points_vis = pygame.sprite.Group()
-
-    pnt = {}
-    for i in range(width // 50):
-        for j in range(height // 50):
-            pnt[Point(i * 50 + 25 + width % 50, j * 50 + 25 + height % 50, points)] = (j, i)
-
-    for i in range(width // 50 + 1):
-        for j in range(height // 50 + 1):
-            Point(i * 50 + 5, j * 50 - 5, points_vis)
-
-    down = Border(horiz_bord, "horiz.png")
-    left = Border(vert_bord_l, "vert.png")
-    r = Border(vert_bord_r, "vert.png")
-
-    flag = True
-    active = 0
-    speed = 1
-    score = 0
-    time = perf_counter()
-    time_pause = 0
-    next_image = next_block()
-    game = True
-    loss = False
-    active_menu = ""
-    time_for_pause = []
-    pos_loss = (-size[0], 0)
-    pict_loss = load_image_game("gameover.jpg", -1)
-    con = sqlite3.connect("records.db")
-    cur = con.cursor()
-
     def name(time_g, score_g):
+        """функция для написания никнейма"""
         nickname = ""
         running_name = True
         shift = False
@@ -489,6 +466,7 @@ def game_run():
                 if ev.type == pygame.QUIT:
                     running_name = False
                 if ev.type == pygame.KEYDOWN:
+                    """реакция на нажатые кнопки"""
                     if ev.key == pygame.K_ESCAPE:
                         nickname = None
                         running_name = False
@@ -518,6 +496,7 @@ def game_run():
             f = pygame.font.Font(None, 40)
 
             for g in range(5):
+                "что написал и выиграл игрок"
                 t = f.render(["Ваш результат:", "Время: " + ":".join(time_g), "Очки: " + str(score_g),
                               "Введите свой никнейм", nickname][g], 1, (20, 20, 20))
                 t_x = size[0] // 2 - t.get_width() // 2
@@ -525,6 +504,7 @@ def game_run():
                 screen.blit(t, (t_x, t_y))
 
             if k % 50 <= 25:
+                """где пишет игрок"""
                 nick = f.render(nickname, 1, (20, 20, 20))
                 t = f.render("|", 1, (20, 20, 20))
                 t_x = size[0] // 2 + nick.get_width() // 2 + 1
@@ -532,6 +512,7 @@ def game_run():
                 screen.blit(t, (t_x, t_y))
 
             if k % 40 <= 20:
+                """мигающие подсказки для игрока"""
                 f = pygame.font.Font(None, 33)
                 t = f.render("Нажмите Enter для продолжения", 1, (20, 20, 20))
                 t_x = size[0] // 2 - t.get_width() // 2
@@ -548,7 +529,64 @@ def game_run():
             pygame.display.flip()
         return nickname
 
+    image = Image.new("RGB", (width, 5), (0, 0, 0))
+    pix = image.load()
+    for i in range(width):
+        for j in range(5):
+            pix[i, j] = (0, 0, 0)
+    image.save("data//horiz.png")
+    image = Image.new("RGB", (1, height), (0, 0, 0))
+    pix = image.load()
+    for j in range(height):
+        pix[0, j] = (0, 0, 0)
+    image.save("data//vert.png")
+    """создаем картинки границ, за которые блок не может выйти"""
+
+    board = Board(width // 50, height // 50)
+    all_sprites = pygame.sprite.Group()
+    all_blocks = pygame.sprite.Group()
+    vert_bord_l = pygame.sprite.Group()
+    vert_bord_r = pygame.sprite.Group()
+    horiz_bord = pygame.sprite.Group()
+    points = pygame.sprite.Group()
+    lines = pygame.sprite.Group()
+    points_vis = pygame.sprite.Group()
+    """все нужные нам группы спрайтов"""
+
+    pnt = {}
+    for i in range(width // 50):
+        for j in range(height // 50):
+            pnt[Point(i * 50 + 25 + width % 50, j * 50 + 25 + height % 50, points)] = (j, i)
+
+    for i in range(width // 50 + 1):
+        for j in range(height // 50 + 1):
+            Point(i * 50 + 5, j * 50 - 5, points_vis)
+    """создаем точки - сначала нужные для программы, потом для удобства игрока"""
+
+    down = Border(horiz_bord, "horiz.png")
+    left = Border(vert_bord_l, "vert.png")
+    r = Border(vert_bord_r, "vert.png")
+    """создаем границы"""
+
+    flag = True
+    active = 0
+    speed = 1
+    score = 0
+    time = perf_counter()
+    time_pause = 0
+    next_image = next_block()
+    game = True
+    loss = False
+    active_menu = ""
+    time_for_pause = []
+    pos_loss = (-size[0], 0)
+    pict_loss = load_image_game("gameover.jpg", -1)
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
+    """задаем все нужные переменные"""
+
     while running:
+        """если мы уже создали блок, то можно отрабатывать команды"""
         if type(active) != int:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -853,6 +891,7 @@ def game_run():
                                 screen.blit(text, (text_x, text_y))
 
                     if pygame.mouse.get_focused():
+                        "кнопочки подсвечиваются, когда на них наводишь мышку"
                         pos = pygame.mouse.get_pos()
                         font = pygame.font.Font(None, 50)
 
@@ -942,19 +981,23 @@ def game_run():
                             screen.blit(text, (text_x, text_y))
 
         if game:
+            """если не нажата пауза"""
             screen.fill((0, 0, 0))
             if flag:
+                """если нет активного блока - он упал уже или еще не создан - создаем"""
                 active = Block(None, None, next_image)
                 next_image = next_block()
                 flag = False
                 if len([1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
                     game = False
                     loss = True
+                    """если при появление блока сразу есть пересечение - игра окончена"""
                 else:
                     score += 15
             for i in all_blocks:
                 if i != active:
                     i.run_down()
+            """блоки обновляются, на экране рисуется все, что только может"""
             flag_or_score = active.update()
             if flag_or_score is not None and flag_or_score[0]:
                 flag = True
@@ -975,6 +1018,7 @@ def game_run():
             pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 510, 220, 50), 1)
             pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 660, 220, 50), 1)
 
+            """вычисляется время, рекорды, тоже отражается на экране"""
             mint = str(int(perf_counter() - time) // 60).rjust(2, "0")
             sec = str(int(perf_counter() - time) % 60).rjust(2, "0")
             mil = str(int((perf_counter() - time) * 100 % 100)).rjust(2, "0")
@@ -1025,6 +1069,7 @@ def game_run():
             elif int(time_for_pause[0]) >= 1:
                 speed = 2
         if loss:
+            """при проигрыше у нас неспешно выезжает заставка, после этого у игрока запрашиваем никнейм"""
             screen.blit(pict_loss, pos_loss)
             if pos_loss[0] >= 0:
                 pos_loss = (0, 0)
@@ -1040,11 +1085,13 @@ def game_run():
 
                 running = False
             else:
+                """выезжание "game_over"""
                 pos_loss = (pos_loss[0] + 5, 0)
         clock.tick(fps)
         pygame.display.flip()
 
     if active_menu == "replay":
+        """если игрок нажал "перерграть" игра начинается сначала"""
         return "replay"
 
 
