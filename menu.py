@@ -464,6 +464,8 @@ def game_run():
     time_for_pause = []
     pos_loss = (-size[0], 0)
     pict_loss = load_image_game("gameover.jpg", -1)
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
 
     def name(time_g, score_g):
         nickname = ""
@@ -935,6 +937,17 @@ def game_run():
 
             time_for_pause = [mint, sec, mil]
 
+            result = cur.execute("SELECT * FROM records").fetchall()
+            if len(result) > 0:
+                result = int(float(sorted(result, key=lambda x: x[2])[0][2]))
+                mint_rec = str(result // 60).rjust(2, "0")
+                sec_rec = str(result % 60).rjust(2, "0")
+                mil_rec = str(result * 100 % 100).rjust(2, "0")
+            else:
+                mint_rec = "00"
+                sec_rec = "00"
+                mil_rec = "00"
+
             font = pygame.font.Font(None, 50)
 
             text = font.render(mint + ":" + sec + ":" + mil, 1, (255, 255, 255))
@@ -944,6 +957,10 @@ def game_run():
             text = font.render(str(score), 1, (255, 255, 255))
             text_x = 854 - text.get_width()
             text_y = 520
+            screen.blit(text, (text_x, text_y))
+            text = font.render(mint_rec + ":" + sec_rec + ":" + mil_rec, 1, (255, 255, 255))
+            text_x = 854 - text.get_width()
+            text_y = 670
             screen.blit(text, (text_x, text_y))
 
             font = pygame.font.Font(None, 70)
@@ -982,6 +999,7 @@ def game_run():
                 pos_loss = (pos_loss[0] + 5, 0)
         clock.tick(fps)
         pygame.display.flip()
+
     if active_menu == "replay":
         return "replay"
 
@@ -1057,7 +1075,7 @@ def records():
     result = cur.execute("SELECT * FROM records").fetchall()
     sorting = "time"
     result = sorted(result, key=lambda x: x[2])[::-1]
-    clear = True
+    clear = False
 
     while running_rec:
         screen_rul.fill((40, 40, 40))
@@ -1173,16 +1191,13 @@ def records():
                 text_y = size_rul[1] // 2 + 40
                 screen.blit(text, (text_x, text_y))
 
-
-
-
         clock.tick(60)
         pygame.display.flip()
+
     con.commit()
     con.close()
 
 
-#start_screen()
-#menu()
-records()
+start_screen()
+menu()
 pygame.quit()
