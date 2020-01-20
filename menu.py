@@ -118,9 +118,9 @@ def menu():
                             draw_button(word, color[word])
 
                 elif 180 <= pos[0] <= 370 and 185 <= pos[1] <= 233:
-                    re_pl = game()
+                    re_pl = game_run()
                     while re_pl is not None:
-                        re_pl = game()
+                        re_pl = game_run()
                 elif 180 <= pos[0] <= 370 and 250 <= pos[1] <= 298:
                     records()
                 elif 180 <= pos[0] <= 370 and 315 <= pos[1] <= 363:
@@ -223,7 +223,7 @@ def menu():
         clock.tick(fps)
 
 
-def game():
+def game_run():
     global size, width, height, screen
 
     size = (900, 800)
@@ -267,10 +267,13 @@ def game():
                 self.image = img
                 self.rect = pygame.Rect(rect[0], rect[1], rect[2], rect[3])
             ct = self.cut()
-            self.image, self.rect = ct[0], pygame.Rect(ct[1])
-            color_key = (0, 0, 0, 255)
-            self.image.set_colorkey(color_key)
-            self.mask = pygame.mask.from_surface(self.image)
+            if ct is not None:
+                self.image, self.rect = ct[0], pygame.Rect(ct[1])
+                color_key = (0, 0, 0, 255)
+                self.image.set_colorkey(color_key)
+                self.mask = pygame.mask.from_surface(self.image)
+            else:
+                all_blocks.remove(self)
 
         def update(self):
             if not pygame.sprite.collide_mask(self, down) and \
@@ -330,17 +333,13 @@ def game():
             self.board = [[0] * wid for _ in range(hei)]
 
         def add(self, cells):
-            # global score
-
             num = 0
             for cell in cells:
                 self.board[cell[0]][cell[1]] = 1
             for line in range(len(self.board)):
                 if all(self.board[line]):
                     num += 1
-                    #score += 100
                     self.delete_line(line)
-                    # print("\n".join([" ".join(list(map(str, o))) for o in self.board]))
                     board.board = [[0] * board.size[0] for _ in range(board.size[1])]
                     for block in all_blocks:
                         cells = []
@@ -349,7 +348,6 @@ def game():
                                 cells.append(pnt[o])
                         for cell in cells:
                             board.board[cell[0]][cell[1]] = 1
-                    # print("\n".join([" ".join(list(map(str, o))) for o in self.board]))
             return num * 100
 
         def delete_line(self, line):
@@ -363,10 +361,9 @@ def game():
                           (block.rect[0], block.rect[1], block.rect[2], (line_spr.rect[1] - block.rect[1]) // 50 * 50))
                     cropped_bl_2 = pygame.Surface(
                         (block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) // 50 * 50))
-                    cropped_bl_2.blit(block.image, (0, 0), (0, (line_spr.rect[1] // 50 - block.rect[1] // 50) * 50,
-                                                            block.rect[2], (
-                                                                        block.rect[1] + block.rect[3] - line_spr.rect[
-                                                                    1]) // 50 * 50))
+                    cropped_bl_2.blit(block.image, (0, 0),
+                                      (0, (line_spr.rect[1] // 50 - block.rect[1] // 50) * 50, block.rect[2],
+                                       (block.rect[1] + block.rect[3] - line_spr.rect[1]) // 50 * 50))
                     Block(cropped_bl_2, (block.rect[0], (line_spr.rect[1] // 50 + 1) * 50 - 5, block.rect[2],
                                          (block.rect[1] + block.rect[3] - line_spr.rect[1]) // 50 * 50))
                     all_blocks.remove(block)
