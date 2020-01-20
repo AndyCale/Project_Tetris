@@ -282,8 +282,7 @@ def game():
                 for o in pygame.sprite.spritecollide(self, points, False):
                     if pygame.sprite.collide_mask(self, o):
                         cells.append(pnt[o])
-                board.add(cells)
-                return True
+                return True, board.add(cells)
 
         def run(self, s):
             if s == "l":
@@ -331,13 +330,15 @@ def game():
             self.board = [[0] * wid for _ in range(hei)]
 
         def add(self, cells):
-            global score
+            # global score
 
+            num = 0
             for cell in cells:
                 self.board[cell[0]][cell[1]] = 1
             for line in range(len(self.board)):
                 if all(self.board[line]):
-                    score += 100
+                    num += 1
+                    #score += 100
                     self.delete_line(line)
                     # print("\n".join([" ".join(list(map(str, o))) for o in self.board]))
                     board.board = [[0] * board.size[0] for _ in range(board.size[1])]
@@ -349,6 +350,7 @@ def game():
                         for cell in cells:
                             board.board[cell[0]][cell[1]] = 1
                     # print("\n".join([" ".join(list(map(str, o))) for o in self.board]))
+            return num * 100
 
         def delete_line(self, line):
             line_spr = Line(line * 50 + 25 + height % 50)
@@ -910,8 +912,11 @@ def game():
             for i in all_blocks:
                 if i != active:
                     i.run_down()
-            if active.update():
+            flag_or_score = active.update()
+            if flag_or_score is not None and flag_or_score[0]:
                 flag = True
+            if flag_or_score is not None:
+                score += flag_or_score[1]
             all_blocks.draw(screen)
             all_sprites.draw(screen)
             points_vis.draw(screen)
