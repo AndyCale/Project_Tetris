@@ -16,12 +16,12 @@ fps = 50
 clock = pygame.time.Clock()
 
 
-def load_image(name, pos=(0, 0), colorkey=None):
+def load_image(name, pos=(0, 0), colors_key=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
-    if colorkey is None:
-        colorkey = image.get_at(pos)
-        image.set_colorkey(colorkey)
+    if colors_key is None:
+        colors_key = image.get_at(pos)
+        image.set_colorkey(colors_key)
     else:
         image = image.convert_alpha()
     return image
@@ -63,7 +63,6 @@ def draw_button(word, color):
     text = font.render(["Играть", "Рекорды", "Об игре", "Выйти"][word], 1, (0, 0, 0))
     text_x = width // 2 - text.get_width() // 2
     text_y = 195 + word * 65
-    # text_w = text.get_width()
     text_h = text.get_height()
     pygame.draw.rect(screen, color,
                      (width // 2 - 95, text_y - 10, 190, text_h + 20))
@@ -90,7 +89,6 @@ def menu():
         color.append((choice(range(50, 255)), choice(range(50, 255)), choice(range(50, 255))))
         draw_button(word, color[-1])
 
-    # Имя игрока - Здрасте игрок
     ex = False
     pos = (0, 0)
 
@@ -273,26 +271,25 @@ def game():
             self.mask = pygame.mask.from_surface(self.image)
 
         def update(self):
-            # global flag
             if not pygame.sprite.collide_mask(self, down) and \
                     (not any([pygame.sprite.collide_mask(self, o) not in ((0, 0), None) for o in all_blocks]) or
                      len([1 for o in all_blocks if pygame.sprite.collide_mask(self, o) is not None]) == 1):
                 self.rect[1] += speed
             else:
                 cells = []
-                for i in pygame.sprite.spritecollide(self, points, False):
-                    if pygame.sprite.collide_mask(self, i):
-                        cells.append(pnt[i])
+                for o in pygame.sprite.spritecollide(self, points, False):
+                    if pygame.sprite.collide_mask(self, o):
+                        cells.append(pnt[o])
                 board.add(cells)
                 return True
 
         def run(self, s):
             if s == "l":
-                if s == "l" and not pygame.sprite.collide_mask(self, l) and \
+                if s == "l" and not pygame.sprite.collide_mask(self, left) and \
                         (not any([pygame.sprite.collide_mask(self, o) not in ((0, 0), None) for o in all_blocks]) or
                          len([1 for o in all_blocks if pygame.sprite.collide_mask(self, o) is not None]) == 1):
                     self.rect[0] -= 50
-                if pygame.sprite.collide_mask(self, l) is not None or \
+                if pygame.sprite.collide_mask(self, left) is not None or \
                         len([1 for o in all_blocks if pygame.sprite.collide_mask(self, o) is not None]) > 1:
                     self.rect[0] += 50
             else:
@@ -379,8 +376,9 @@ def game():
                 elif block.rect[1] + block.rect[3] - line_spr.rect[1] > 50:
                     cropped_bl = pygame.Surface(
                         (block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) // 50 * 50))
-                    cropped_bl.blit(block.image, (0, 0), (
-                    0, 50, block.rect[2], (block.rect[1] + block.rect[3] - line_spr.rect[1]) // 50 * 50))
+                    cropped_bl.blit(block.image, (0, 0), (0, 50, block.rect[2],
+                                                          (block.rect[1] + block.rect[3] -
+                                                           line_spr.rect[1]) // 50 * 50))
                     Block(cropped_bl, (block.rect[0], (line_spr.rect[1] // 50 + 1) * 50 - 5, block.rect[2],
                                        (block.rect[1] + block.rect[3] - line_spr.rect[1]) // 50 * 50))
                     all_blocks.remove(block)
@@ -449,7 +447,7 @@ def game():
             Point(i * 50 + 5, j * 50 - 5, points_vis)
 
     down = Border(horiz_bord, "horiz.png")
-    l = Border(vert_bord_l, "vert.png")
+    left = Border(vert_bord_l, "vert.png")
     r = Border(vert_bord_r, "vert.png")
 
     flag = True
@@ -572,7 +570,7 @@ def game():
                                     len([1 for i in all_blocks if
                                          pygame.sprite.collide_mask(active, i) is not None]) > 1:
                                 active.rect[1] -= 1
-                            while pygame.sprite.collide_mask(active, l) is not None:
+                            while pygame.sprite.collide_mask(active, left) is not None:
                                 active.rect[0] += 50
                             while pygame.sprite.collide_mask(active, r) is not None:
                                 active.rect[0] -= 50
@@ -588,7 +586,7 @@ def game():
                             while pygame.sprite.collide_mask(active, down) is not None or len(
                                     [1 for i in all_blocks if pygame.sprite.collide_mask(active, i) is not None]) > 1:
                                 active.rect[1] -= 1
-                            while pygame.sprite.collide_mask(active, l) is not None:
+                            while pygame.sprite.collide_mask(active, left) is not None:
                                 active.rect[0] += 50
                             while pygame.sprite.collide_mask(active, r) is not None:
                                 active.rect[0] -= 50
