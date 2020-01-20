@@ -11,12 +11,14 @@ pygame.init()
 size = width, height = 550, 550
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('TeTris')
+"""инизиализация Pygame"""
 
 fps = 50
 clock = pygame.time.Clock()
 
 
 def load_image(name, pos=(0, 0), colors_key=None):
+    # функция для загрузки картинок из папки data
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
     if colors_key is None:
@@ -33,6 +35,7 @@ def terminate():
 
 
 def start_screen():
+    """заставка перед меню игры"""
     intro_text = ["ЗАСТАВКА", "Тетрис"]
 
     fon = pygame.transform.scale(load_image('pict.jpg'), (width, height))
@@ -49,6 +52,7 @@ def start_screen():
         screen.blit(string_rendered, intro_rect)
 
     while True:
+        """показывается, пока мы не нажмем любую клавишу мыши или клавиатуры"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -59,6 +63,7 @@ def start_screen():
 
 
 def draw_button(word, color):
+    """функция рисования кнопок для меню"""
     font = pygame.font.Font(None, 40)
     text = font.render(["Играть", "Рекорды", "Об игре", "Выйти"][word], 1, (0, 0, 0))
     text_x = width // 2 - text.get_width() // 2
@@ -72,6 +77,7 @@ def draw_button(word, color):
 
 def menu():
     global screen, size, width, height
+    """начальное меню игры"""
 
     screen.fill((0, 0, 0))
     color_let = []
@@ -93,12 +99,14 @@ def menu():
     pos = (0, 0)
 
     while True:
+        """пока мы не выберем, что хотим увидеть, перед нами будет меню"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 ex = True
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 ex = True
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                """если мы кликнули куда-то мышкой, то вот возможные реакции, в зависимости от того, куда мы кликнули"""
                 pos = event.pos
                 if ex:
                     if 200 <= pos[0] <= 250 and 290 <= pos[1] <= 320:
@@ -151,6 +159,8 @@ def menu():
                 draw_button(3, (color[3][0] if color[3][0] <= 255 else 255,
                                 color[3][1] if color[3][1] <= 255 else 255,
                                 color[3][2] if color[3][2] <= 255 else 255))
+
+                """после завершения игры/просмотра правил или рекордов у нас вновь прорисовывается меню"""
 
             elif pygame.mouse.get_focused():
                 pos = pygame.mouse.get_pos()
