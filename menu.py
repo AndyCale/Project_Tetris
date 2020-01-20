@@ -1047,7 +1047,7 @@ def rules():
 
 
 def records():
-    size_rul = 720, 870
+    size_rul = 720, 930
     screen_rul = pygame.display.set_mode(size_rul)
     screen_rul.fill((40, 40, 40))
 
@@ -1057,6 +1057,7 @@ def records():
     result = cur.execute("SELECT * FROM records").fetchall()
     sorting = "time"
     result = sorted(result, key=lambda x: x[2])[::-1]
+    clear = True
 
     while running_rec:
         screen_rul.fill((40, 40, 40))
@@ -1071,6 +1072,23 @@ def records():
                 else:
                     sorting = "time"
                     result = sorted(result, key=lambda x: x[2])[::-1]
+            elif event.type == pygame.MOUSEBUTTONDOWN and size_rul[0] // 2 -\
+                    140 <= event.pos[0] <= size_rul[0] // 2 + 140 and 870 <= event.pos[1] <= 910:
+                clear = True
+            elif clear and event.type == pygame.MOUSEBUTTONDOWN and size_rul[0] // \
+                    2 - 115 <= event.pos[0] <= size_rul[0] // 2 - 25 and size_rul[1] // \
+                    2 + 27 <= event.pos[1] <= size_rul[1] // 2 + 77:
+                con = sqlite3.connect("records.db")
+                cur = con.cursor()
+
+                cur.execute("DELETE from Records")
+
+                con.commit()
+                con.close()
+            elif clear and event.type == pygame.MOUSEBUTTONDOWN and size_rul[0] //\
+                    2 + 25 <= event.pos[0] <= size_rul[0] // 2 + 115 and size_rul[1] //\
+                    2 + 27 <= event.pos[1] <= size_rul[1] // 2 + 77:
+                clear = False
 
         number = 20 if len(result) > 20 else len(result)
 
@@ -1083,12 +1101,21 @@ def records():
         pygame.draw.rect(screen, (231, 209, 187), (width + (size[0] - width) // 2 - 110, 20, 220, 50))
         pygame.draw.rect(screen, (255, 255, 255), (width + (size[0] - width) // 2 - 110, 20, 220, 50), 1)
 
+        pygame.draw.rect(screen, (231, 209, 187), (size_rul[0] // 2 - 140, 870, 280, 40))
+        pygame.draw.rect(screen, (255, 255, 255), (size_rul[0] // 2 - 140, 870, 280, 40), 1)
+
         text = font.render("Времени" if sorting == "time" else "Очкам", 1, (30, 30, 30))
         text_x = 550 - text.get_width() // 2
         text_y = 35
         screen.blit(text, (text_x, text_y))
 
         font = pygame.font.Font(None, 30)
+
+        text = font.render("Стереть все рекорды", 1, (30, 30, 30))
+        text_x = size_rul[0] // 2 - text.get_width() // 2
+        text_y = 882
+        screen.blit(text, (text_x, text_y))
+
         for i in range(number):
             for j in range(4):
                 t = str(result[i][j])
@@ -1124,12 +1151,37 @@ def records():
             pygame.draw.line(screen, (255, 255, 255), (text_x - 10, 105), (text_x - 10, 840), 1)
         pygame.draw.line(screen, (255, 255, 255), (17, 135), (700, 135), 1)
 
+        if clear:
+            pygame.draw.rect(screen, (231, 209, 187), (size_rul[0] // 2 - 180, size_rul[1] // 2 - 100, 360, 200))
+            pygame.draw.rect(screen, (255, 255, 255), (size_rul[0] // 2 - 180, size_rul[1] // 2 - 100, 360, 200), 1)
+            pygame.draw.rect(screen, (150, 150, 150), (size_rul[0] // 2 - 115, size_rul[1] // 2 + 27, 90, 50))
+            pygame.draw.rect(screen, (255, 255, 255), (size_rul[0] // 2 - 115, size_rul[1] // 2 + 27, 90, 50), 1)
+            pygame.draw.rect(screen, (150, 150, 150), (size_rul[0] // 2 + 25, size_rul[1] // 2 + 27, 90, 50))
+            pygame.draw.rect(screen, (255, 255, 255), (size_rul[0] // 2 + 25, size_rul[1] // 2 + 27, 90, 50), 1)
+
+            font = pygame.font.Font(None, 40)
+            for p in range(2):
+                text = font.render(["Вы уверены, что хотите", "стереть все рекорды?"][p], 1, (30, 30, 30))
+                text_x = size_rul[0] // 2 - text.get_width() // 2
+                text_y = size_rul[1] // 2 - 80 + p * 40
+                screen.blit(text, (text_x, text_y))
+
+            for p in range(2):
+                text = font.render(["Да", "Нет"][p], 1, (30, 30, 30))
+                text_x = size_rul[0] // 2 - 90 + p * 135
+                text_y = size_rul[1] // 2 + 40
+                screen.blit(text, (text_x, text_y))
+
+
+
+
         clock.tick(60)
         pygame.display.flip()
     con.commit()
     con.close()
 
 
-start_screen()
-menu()
+#start_screen()
+#menu()
+records()
 pygame.quit()
