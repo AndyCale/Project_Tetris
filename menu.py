@@ -1075,13 +1075,8 @@ def game_run():
                 pos_loss = (0, 0)
                 nick_name = name(time_for_pause, score)
                 if nick_name is not None:
-                    con = sqlite3.connect("records.db")
-                    cur = con.cursor()
                     cur.execute("INSERT INTO Records(Nickname, Time, Score) VALUES('{}', {},"
                                 " {})".format(nick_name, perf_counter() - time, score))
-
-                    con.commit()
-                    con.close()
 
                 running = False
             else:
@@ -1089,6 +1084,8 @@ def game_run():
                 pos_loss = (pos_loss[0] + 5, 0)
         clock.tick(fps)
         pygame.display.flip()
+    con.commit()
+    con.close()
 
     if active_menu == "replay":
         """если игрок нажал "перерграть" игра начинается сначала"""
