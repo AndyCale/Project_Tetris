@@ -36,20 +36,13 @@ def terminate():
 
 def start_screen():
     """заставка перед меню игры"""
-    intro_text = ["ЗАСТАВКА", "Тетрис"]
-
     fon = pygame.transform.scale(load_image('pict.jpg'), (width, height))
     screen.blit(fon, (0, 0))
-    font = pygame.font.Font(None, 80)
-    text_coord = 100
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 80
-        intro_rect.top = text_coord
-        intro_rect.x = 140
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
+    font = pygame.font.Font(None, 120)
+    text = font.render("TeTris", 1, (255, 255, 255))
+    text_x = width // 2 - text.get_width() // 2
+    text_y = 400
+    screen.blit(text, (text_x, text_y))
 
     while True:
         """показывается, пока мы не нажмем любую клавишу мыши или клавиатуры"""
@@ -80,6 +73,9 @@ def menu():
     """начальное меню игры"""
 
     screen.fill((0, 0, 0))
+    fon = pygame.transform.scale(load_image('pict2.jpg'), (width, height))
+    screen.blit(fon, (0, 0))
+
     color_let = []
     for let in range(len("TeTris")):
         font = pygame.font.Font(None, 90)
@@ -139,6 +135,8 @@ def menu():
                 size = width, height = 550, 550
                 screen = pygame.display.set_mode(size)
                 screen.fill((0, 0, 0))
+                fon = pygame.transform.scale(load_image('pict2.jpg'), (width, height))
+                screen.blit(fon, (0, 0))
 
                 for let in range(len("TeTris")):
                     font = pygame.font.Font(None, 90)
